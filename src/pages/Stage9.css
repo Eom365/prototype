@@ -1,0 +1,203 @@
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px 100px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+    line-height: 1.4;
+}
+
+.section {
+    margin-bottom: 34px;
+}
+
+.subtitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.price-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.price-label {
+    font-size: 14px;
+    color: #333;
+    flex-shrink: 0;
+}
+
+.currency-select {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    outline: none;
+    font-family: inherit;
+    min-width: 100px;
+}
+
+.currency-select:focus {
+    border-color: #2ecc71;
+}
+
+.price-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.price-symbol {
+    font-size: 18px;
+    font-weight: bold;
+    color: #c0392b;
+    flex-shrink: 0;
+}
+
+.price-input {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    outline: none;
+    width: 160px;
+    box-sizing: border-box;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.price-input:focus {
+    border-color: #2ecc71;
+}
+
+.loyalty-subtitle {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 18px;
+}
+
+.loyalty-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.loyalty-text {
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+}
+
+.loyalty-input {
+    padding: 5px 8px;
+    font-size: 14px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.loyalty-input:focus {
+    border-color: #2ecc71;
+}
+
+.loyalty-input--small {
+    width: 38px;
+    text-align: center;
+    padding: 3px 4px;
+    font-size: 13px;
+}
+
+.loyalty-input--price {
+    width: 60px;
+    padding: 3px 6px;
+    font-size: 13px;
+}
+
+.loyalty-currency {
+    font-size: 16px;
+    font-weight: bold;
+    color: #c0392b;
+    margin-left: 6px;
+}
+
+.loyalty-help {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid #333;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: help;
+    flex-shrink: 0;
+    margin-left: 4px;
+}
+/* ===== Toggle switch (крупный, с колесиком) ===== */
+.toggle {
+    position: relative;
+    width: 56px;
+    height: 30px;
+    border-radius: 15px;
+    border: none;
+    background: #ccc;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: background 0.25s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.toggle--on {
+    background: #2ecc71;
+}
+
+.toggle__knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.25),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.1),
+        inset 0 2px 2px rgba(255, 255, 255, 0.9);
+    transition: transform 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Колесико внутри ручки — маленькие рёбрышки */
+.toggle__knob::after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 30% 30%, #fff 0%, #ddd 70%, #bbb 100%);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.toggle--on .toggle__knob {
+    transform: translateX(26px);
+}

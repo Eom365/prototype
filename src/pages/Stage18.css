@@ -46,12 +46,11 @@
     margin: 0;
 }
 
-/* ===== Строка с радио + input ===== */
 .radio-row {
     display: grid;
-    grid-template-columns: 140px 24px 1fr;
+    grid-template-columns: auto 1fr;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     margin-bottom: 12px;
 }
 
@@ -70,28 +69,63 @@
     flex-shrink: 0;
 }
 
-.inline-input {
-    padding: 6px 10px;
+.material-hint {
     font-size: 14px;
-    border: none;
-    border-bottom: 1px solid #333;
-    border-radius: 0;
+    color: #999;
+    font-style: italic;
+    margin: 0;
+}
+
+/* ===== Кнопки материала ===== */
+.material-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.material-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    border: 1.5px solid #bbb;
+    border-radius: 8px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.material-btn:hover {
+    border-color: #888;
+    background: #fafafa;
+}
+
+.material-btn--active {
+    border-color: #2ecc71;
+    background: #eafaf1;
+    color: #1e8449;
+    font-weight: 600;
+}
+
+.material-btn--active:hover {
+    border-color: #2ecc71;
+    background: #eafaf1;
+}
+
+.material-input {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1.5px solid #bbb;
+    border-radius: 8px;
     outline: none;
-    background: transparent;
-    width: 100%;
-    box-sizing: border-box;
+    background: #fff;
+    font-family: inherit;
+    min-width: 220px;
+    transition: border-color 0.2s;
 }
 
-.inline-input:focus {
-    border-bottom-color: #2ecc71;
-}
-
-/* ===== Материал ===== */
-.material-list p {
-    margin: 6px 0;
-    font-size: 14px;
-    color: #444;
-    line-height: 1.5;
+.material-input:focus {
+    border-color: #2ecc71;
 }
 
 /* ===== Размеры ===== */
@@ -138,6 +172,7 @@
     background: #fff;
     color: #333;
     margin-bottom: 20px;
+    font-family: inherit;
 }
 
 .add-photo-btn:hover:not(:disabled) {
@@ -198,17 +233,4 @@
     height: 100%;
     object-fit: cover;
     display: block;
-}
-.radio-row {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-.material-hint {
-    font-size: 14px;
-    color: #999;
-    font-style: italic;
-    margin: 0;
 }

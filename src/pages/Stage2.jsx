@@ -117,7 +117,7 @@ function Stage2() {
                 </div>
             </div>
 
-            <BottomBar current={2} total={20} prevPath="/stage1" nextPath="/stage3" />
+            <BottomBar current={2} total={21} prevPath="/stage1" nextPath="/stage3" />
         </>
     )
 }

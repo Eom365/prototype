@@ -13,13 +13,12 @@
     font-family: system-ui, sans-serif;
 }
 
-/* 4 равные колонки на всю ширину */
+
 .bottom-bar__col {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* ← центрируем содержимое в каждой колонке */
     height: 100%;
 }
 

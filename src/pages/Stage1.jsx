@@ -3,13 +3,24 @@ import BottomBar from '../components/BottomBar'
 import './Stage1.css'
 
 function Stage1() {
+    const [user, setUser] = useState({
+        lastName: '',
+        firstName: '',
+        middleName: '',
+    })
+
     const [fields, setFields] = useState({
         field1: '',
         field2: '',
         field3: '',
         field4: '',
         field5: '',
+        field6: '',
     })
+
+    const handleUserChange = (name, value) => {
+        setUser((prev) => ({ ...prev, [name]: value }))
+    }
 
     const handleChange = (name, value) => {
         setFields((prev) => ({ ...prev, [name]: value }))
@@ -18,8 +29,47 @@ function Stage1() {
     return (
         <>
             <div className="container">
+                <h1 className="title">Заполните информацию о себе:</h1>
+
+                <div className="form">
+                    <div className="field">
+                        <label className="label">Фамилия</label>
+                        <input
+                            type="text"
+                            value={user.lastName}
+                            onChange={(e) => handleUserChange('lastName', e.target.value)}
+                            className="input"
+                            placeholder="Введите фамилию..."
+                        />
+                    </div>
+
+                    <div className="field">
+                        <label className="label">Имя</label>
+                        <input
+                            type="text"
+                            value={user.firstName}
+                            onChange={(e) => handleUserChange('firstName', e.target.value)}
+                            className="input"
+                            placeholder="Введите имя..."
+                        />
+                    </div>
+
+                    <div className="field">
+                        <label className="label">Отчество</label>
+                        <input
+                            type="text"
+                            value={user.middleName}
+                            onChange={(e) => handleUserChange('middleName', e.target.value)}
+                            className="input"
+                            placeholder="Введите отчество..."
+                        />
+                    </div>
+                </div>
+
                 <h1 className="title">Проверка идентичности товара</h1>
-                <h2 className="subtitle">Этап 1 - Введите информацию о товаре для поиска совпадений среди существующих карточек товаров</h2>
+                <h2 className="subtitle">
+                    Этап 1 — Введите информацию о товаре для поиска совпадений среди существующих карточек товаров
+                </h2>
 
                 <div className="form">
                     <div className="field">
@@ -45,7 +95,7 @@ function Stage1() {
                     </div>
 
                     <div className="field">
-                        <label className="label">Производител товара</label>
+                        <label className="label">Производитель товара</label>
                         <input
                             type="text"
                             value={fields.field3}
@@ -76,12 +126,13 @@ function Stage1() {
                             placeholder="Введите значение..."
                         />
                     </div>
+
                     <div className="field">
                         <label className="label">Внутренний артикул производителя</label>
                         <input
                             type="text"
-                            value={fields.field5}
-                            onChange={(e) => handleChange('field5', e.target.value)}
+                            value={fields.field6}
+                            onChange={(e) => handleChange('field6', e.target.value)}
                             className="input"
                             placeholder="Введите значение..."
                         />
@@ -89,7 +140,7 @@ function Stage1() {
                 </div>
             </div>
 
-            <BottomBar current={1} total={20} nextPath="/stage2" />
+            <BottomBar current={1} total={21} nextPath="/stage2" />
         </>
     )
 }

@@ -1,31 +1,37 @@
 import { useNavigate } from 'react-router-dom'
 import './BottomBar.css'
 
-function BottomBar({ current, total = 20, nextPath, prevPath }) {
+function BottomBar({ current, total = 21
+    , nextPath, prevPath, onNext }) {
     const navigate = useNavigate()
+
+    const handleNextClick = () => {
+        if (onNext) {
+            onNext()        
+        } else if (nextPath) {
+            navigate(nextPath) 
+        }
+    }
 
     return (
         <div className="bottom-bar">
-            {/* Колонка 1: Этап X из Y */}
             <div className="bottom-bar__col">
                 <span className="bottom-bar__stage">
                     Этап {current} из {total}
                 </span>
             </div>
 
-            {/* Колонка 2: Назад */}
             <div className="bottom-bar__col">
                 {prevPath && (
                     <button
                         className="bottom-bar__btn"
                         onClick={() => navigate(prevPath)}
                     >
-                        ← Назад
+                        ← Вернуть на этап назад
                     </button>
                 )}
             </div>
 
-            {/* Колонка 3: Крестик */}
             <div className="bottom-bar__col">
                 <button
                     className="bottom-bar__close"
@@ -36,12 +42,11 @@ function BottomBar({ current, total = 20, nextPath, prevPath }) {
                 </button>
             </div>
 
-            {/* Колонка 4: Далее */}
             <div className="bottom-bar__col">
                 <button
                     className="bottom-bar__btn"
-                    onClick={() => nextPath && navigate(nextPath)}
-                    disabled={!nextPath}
+                    onClick={handleNextClick}
+                    disabled={!nextPath && !onNext}
                 >
                     Далее →
                 </button>

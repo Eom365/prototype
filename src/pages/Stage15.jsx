@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react'
 import BottomBar from '../components/BottomBar'
-import './Stage5.css'
+import './Stage15.css'
 
-function Stage5() {
+function Stage15() {
     // Блок 1: Описание товара
     const [description, setDescription] = useState({
         field1: '',
@@ -14,66 +14,43 @@ function Stage5() {
 
     // Блок 2: Характеристики
     const [specs, setSpecs] = useState({
-        // Базовые
         article: '',
         model: '',
-
-        // Вес
         weight: '',
         weightUnit: 'gram',
-
-        // Погрешность веса
         tolerance: '',
         toleranceMode: 'gram',
-
-        // Габариты
         length: '',
         lengthUnit: 'millimeters',
         width: '',
         widthUnit: 'millimeters',
         height: '',
         heightUnit: 'millimeters',
-
-        // Размер головки
         headSize: '',
         headSizeCustom: '',
-
-        // Производитель
         brand: '',
         manufacturer: '',
         country: '',
-
-        // Технические характеристики
         gearRatio: '',
         gearRatioCustom: '',
         maxSpeed: '',
         maxSpeedCustom: '',
-
-        // Освещение
         light: '',
         lightSource: '',
-
-        // Система охлаждения
         coolingType: '',
         sprayPoints: '',
-
-        // Механические характеристики
         burLock: '',
         motorConnection: '',
         motorConnectionCustom: '',
-
-        // Материал
         bodyMaterial: '',
         bodyMaterialCustom: '',
         bodyCoating: '',
         bodyCoatingCustom: '',
-
-        // Гарантия
         warranty: '',
         warrantyCustom: '',
     })
 
-    // Логотип (файл)
+    // Логотип
     const [logoFile, setLogoFile] = useState(null)
     const logoInputRef = useRef(null)
 
@@ -209,7 +186,6 @@ function Stage5() {
                                 <span className="file-text">Загрузить фотографию</span>
                             </button>
                         )}
-
                     </div>
 
                     {/* Артикул */}
@@ -855,9 +831,9 @@ function Stage5() {
                 </div>
             </div>
 
-            <BottomBar current={5} total={21} prevPath="/stage4" nextPath="/stage6" />
+            <BottomBar current={15} total={21} prevPath="/stage14" nextPath="/stage16" />
         </>
     )
 }
 
-export default Stage5
+export default Stage15

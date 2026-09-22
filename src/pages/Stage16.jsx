@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import BottomBar from '../components/BottomBar'
-import './Stage6.css'
+import './Stage16.css'
 
-function Stage6() {
+function Stage16() {
     const [productName, setProductName] = useState('')
 
     const [features, setFeatures] = useState({
@@ -13,7 +13,6 @@ function Stage6() {
         model: false,
     })
 
-    // Переключение одного варианта
     const toggleFeature = (name) => {
         setFeatures((prev) => ({ ...prev, [name]: !prev[name] }))
     }
@@ -22,10 +21,9 @@ function Stage6() {
         <>
             <div className="container">
                 <h1 className="title">
-                    Этап 6. Полное наименование продукта
+                    Этап 16. Полное наименование продукта
                 </h1>
 
-                {/* Поле "Наименование товара" */}
                 <div className="field">
                     <label className="label">Наименование продукта</label>
                     <input
@@ -37,7 +35,6 @@ function Stage6() {
                     />
                 </div>
 
-                {/* Список характеристик */}
                 <div className="field">
                     <label className="label">
                         Характеристики, которые отображаются в наименовании продукта
@@ -87,9 +84,9 @@ function Stage6() {
                 </div>
             </div>
 
-            <BottomBar current={6} total={21} prevPath="/stage5" nextPath="/stage7" />
+            <BottomBar current={16} total={21} prevPath="/stage15" nextPath="/stage17" />
         </>
     )
 }
 
-export default Stage6
+export default Stage16

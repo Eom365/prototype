@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react'
 import BottomBar from '../components/BottomBar'
-import './Stage7.css'
+import './Stage17.css'
 
-function Stage7() {
+function Stage17() {
     const [fields, setFields] = useState({
         warranty: '',
         brand: '',
@@ -102,7 +102,7 @@ function Stage7() {
     return (
         <>
             <div className="container">
-                <h2 className="subtitle">Этап 7 - Добавьте документы</h2>
+                <h2 className="subtitle">Этап 17 - Добавьте документы</h2>
 
                 <div className="form">
                     {renderField('warranty', 'Гарантийный талон')}
@@ -146,9 +146,9 @@ function Stage7() {
                 )}
             </div>
 
-            <BottomBar current={7} total={21} prevPath="/stage6" nextPath="/stage8" />
+            <BottomBar current={17} total={21} prevPath="/stage16" nextPath="/stage18" />
         </>
     )
 }
 
-export default Stage7
+export default Stage17

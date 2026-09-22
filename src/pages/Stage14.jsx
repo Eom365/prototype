@@ -1,10 +1,12 @@
 import { useState, useRef } from 'react'
 import BottomBar from '../components/BottomBar'
+import './Stage14.css'
 
 const MAX_PHOTOS = 5
 
-function Stage4() {
+function Stage14() {
     const [photos, setPhotos] = useState([])
+    const [showNoSub, setShowNoSub] = useState(false)
     const fileInputRef = useRef(null)
 
     const handleAddClick = () => {
@@ -20,11 +22,15 @@ function Stage4() {
         e.target.value = ''
     }
 
+    const handleAddVideo = () => {
+        setShowNoSub(true)
+    }
+
     return (
         <>
             <div className="container">
-                <h1 className="title">Этап 4 - Фотографии продукта</h1>
-                <h2 className="subtitle">Добавьте фотографии продукта</h2>
+                <h1 className="title">Этап 14 - Презентация продукта</h1>
+                <h2 className="subtitle">Презентационные фотографии продукта</h2>
 
                 <input
                     type="file"
@@ -68,11 +74,25 @@ function Stage4() {
                         ))}
                     </div>
                 </div>
+
+                <h2 className="subtitle subtitle--video">
+                    Презентационное видео продукта
+                </h2>
+                <div className="video-row">
+                    <button className="add-video-btn" onClick={handleAddVideo}>
+                        <span className="add-video-btn__icon">＋</span>
+                        <span className="add-video-btn__text">Добавить видео</span>
+                    </button>
+
+                    {showNoSub && (
+                        <span className="no-sub-text">Оплатите подписку и добавьте видео</span>
+                    )}
+                </div>
             </div>
 
-            <BottomBar current={4} total={21} prevPath="/stage3" nextPath="/stage5" />
+            <BottomBar current={14} total={21} prevPath="/stage13" nextPath="/stage15" />
         </>
     )
 }
 
-export default Stage4
+export default Stage14

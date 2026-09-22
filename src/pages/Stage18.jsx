@@ -1,10 +1,10 @@
 import { useState, useRef } from 'react'
 import BottomBar from '../components/BottomBar'
-import './Stage8.css'
+import './Stage18.css'
 
 const MAX_PHOTOS = 5
 
-function Stage8() {
+function Stage18() {
     const [packType, setPackType] = useState('')
     const [material, setMaterial] = useState('')
     const [materialCustom, setMaterialCustom] = useState('')
@@ -41,7 +41,7 @@ function Stage8() {
     return (
         <>
             <div className="container">
-                <h1 className="title">Этап 8. Добавьте упаковку</h1>
+                <h1 className="title">Этап 18. Добавьте упаковку</h1>
 
                 {/* Вид упаковки */}
                 <div className="section">
@@ -346,9 +346,9 @@ function Stage8() {
                 </div>
             </div>
 
-            <BottomBar current={8} total={21} prevPath="/stage7" nextPath="/stage9" />
+            <BottomBar current={18} total={21} prevPath="/stage17" nextPath="/stage19" />
         </>
     )
 }
 
-export default Stage8
+export default Stage18
