@@ -1,10 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import BottomBar from '../components/BottomBar'
+import { productsApi } from '../api'
+import { discountsFrom, emptyDiscounts } from '../cardScope'
 import './Stage9.css'
 
 function Stage9() {
+    const [params] = useSearchParams()
+    const productId = params.get('id')
     const [currency, setCurrency] = useState('RUB')
     const [price, setPrice] = useState('')
+    const [loaded, setLoaded] = useState(false)
+    const [error, setError] = useState('')
 
     // Символ выбранной валюты
     const currencySymbols = {
@@ -13,11 +20,28 @@ function Stage9() {
     }
 
     // Скидки (система лояльности)
-    const [discounts, setDiscounts] = useState([
-        { enabled: true, from: '', to: '', value: '' },
-        { enabled: true, from: '', to: '', value: '' },
-        { enabled: true, from: '', to: '', value: '' },
-    ])
+    const [discounts, setDiscounts] = useState(emptyDiscounts)
+
+    useEffect(() => {
+        if (!productId) return
+        productsApi.get(productId).then((product) => {
+            setCurrency(product.currency || 'RUB')
+            setPrice(product.price || '')
+            setDiscounts(discountsFrom(product, null))
+            setLoaded(true)
+        }).catch((loadError) => setError(loadError.message))
+    }, [productId])
+
+    const save = () => {
+        if (!productId) throw new Error('Сначала создайте карточку на главной странице')
+        if (!loaded) throw new Error('Карточка ещё загружается, подождите секунду')
+        return productsApi.savePrice(productId, {
+            variationId: null,
+            currency,
+            price,
+            discounts,
+        })
+    }
 
     const handleDiscountChange = (index, field, value) => {
         setDiscounts((prev) =>
@@ -41,6 +65,8 @@ function Stage9() {
                 <h1 className="title">
                     Этап 9. Добавьте стоимость товара и систему лояльности
                 </h1>
+                {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
+                {error && <p className="form-error">{error}</p>}
 
                 {/* ===== Стоимость товара ===== */}
                 <div className="section">
@@ -147,7 +173,7 @@ function Stage9() {
                 </div>
             </div>
 
-            <BottomBar current={9} total={21} prevPath="/stage8" nextPath="/stage10" />
+            <BottomBar current={9} total={21} prevPath="/stage8" nextPath="/stage10" onSave={save} />
         </>
     )
 }

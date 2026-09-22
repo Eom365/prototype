@@ -1,18 +1,23 @@
-import { useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import BottomBar from '../components/BottomBar'
+import { productsApi } from '../api'
+import { useCardIds } from '../cardScope'
 import './Stage17.css'
 
+const documentLabels = {
+    warranty: 'Гарантийный талон',
+    brand: 'Бренд',
+    certificate: 'Сертификат соответствия',
+    declaration: 'Декларация о соответствии',
+    stateRegistration: 'Свидетельство о государственной регистрации',
+    registration: 'Регистрационное удостоверение',
+    manual: 'Руководство по эксплуатации',
+    other: 'Иной документ',
+}
+
 function Stage17() {
-    const [fields, setFields] = useState({
-        warranty: '',
-        brand: '',
-        certificate: '',
-        declaration: '',
-        stateRegistration: '',
-        registration: '',
-        manual: '',
-        other: '',
-    })
+    const { productId, variationId } = useCardIds()
+    const [error, setError] = useState('')
 
     const [files, setFiles] = useState({
         warranty: null,
@@ -27,30 +32,63 @@ function Stage17() {
 
     const fileInputsRef = useRef({})
 
-    const handleChange = (name, value) => {
-        setFields((prev) => ({ ...prev, [name]: value }))
+    const load = async () => {
+        const product = await productsApi.get(productId)
+        const next = {
+            warranty: null,
+            brand: null,
+            certificate: null,
+            declaration: null,
+            stateRegistration: null,
+            registration: null,
+            manual: null,
+            other: null,
+        }
+        for (const file of product.files || []) {
+            if (file.role === 'document' && file.documentType && file.variationId === variationId) {
+                next[file.documentType] = { ...file, section: documentLabels[file.documentType] || file.name }
+            }
+        }
+        setFiles(next)
     }
+
+    useEffect(() => {
+        if (!productId || !variationId) return
+        load().catch((loadError) => setError(loadError.message))
+    }, [productId, variationId])
 
     const handleFileClick = (name) => {
         fileInputsRef.current[name]?.click()
     }
 
-    const handleFileChange = (name, label, e) => {
+    const handleFileChange = async (name, label, e) => {
         const file = e.target.files?.[0]
-        if (!file) return
-        const url = URL.createObjectURL(file)
-        setFiles((prev) => ({
-            ...prev,
-            [name]: { file, url, name: file.name, section: label },
-        }))
         e.target.value = ''
+        if (!file || !productId || !variationId) return
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('role', 'document')
+        formData.append('documentType', name)
+        formData.append('variationId', variationId)
+        setError('')
+        try {
+            await productsApi.upload(productId, formData)
+            await load()
+        } catch (uploadError) {
+            setError(uploadError.message)
+        }
     }
 
-    const handleFileRemove = (name) => {
-        setFiles((prev) => {
-            if (prev[name]?.url) URL.revokeObjectURL(prev[name].url)
-            return { ...prev, [name]: null }
-        })
+    const handleFileRemove = async (name) => {
+        const file = files[name]
+        if (!file?.id) return
+        setError('')
+        try {
+            await productsApi.deleteFile(file.id)
+            await load()
+        } catch (removeError) {
+            setError(removeError.message)
+        }
     }
 
     const renderField = (name, label) => (
@@ -68,10 +106,9 @@ function Stage17() {
                 <input
                     type="text"
                     className="file-input__text"
-                    value={files[name] ? files[name].name : fields[name]}
-                    onChange={(e) => handleChange(name, e.target.value)}
+                    value={files[name] ? files[name].name : ''}
                     placeholder={label}
-                    readOnly={!!files[name]}
+                    readOnly
                 />
 
                 {files[name] && (
@@ -103,6 +140,9 @@ function Stage17() {
         <>
             <div className="container">
                 <h2 className="subtitle">Этап 17 - Добавьте документы</h2>
+                {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
+                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 13.</p>}
+                {error && <p className="form-error">{error}</p>}
 
                 <div className="form">
                     {renderField('warranty', 'Гарантийный талон')}

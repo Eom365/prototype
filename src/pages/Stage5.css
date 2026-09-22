@@ -68,7 +68,7 @@
 
 .field-row {
     display: grid;
-    grid-template-columns: 24px 1fr 140px 140px 30px 100px;
+    grid-template-columns: 24px minmax(180px, 240px) minmax(180px, 1fr) 160px 30px;
     align-items: center;
     gap: 12px;
     border-bottom: 1px solid #ddd;
@@ -131,4 +131,56 @@
     outline: none;
     width: 100%;
     box-sizing: border-box;
+}
+
+.field-row--options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.option-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex: 1 1 280px;
+}
+
+.option-btn {
+    padding: 8px 12px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    font: inherit;
+}
+
+.option-btn--active {
+    border-color: #2ecc71;
+    background: #eafaf1;
+}
+
+.option-custom-input {
+    min-width: 180px;
+    flex: 1;
+}
+
+.file-preview {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.field-input--file {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    grid-column: span 2;
+    cursor: pointer;
+}
+
+.paragraph {
+    text-align: left;
+    color: #333;
 }

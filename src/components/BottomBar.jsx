@@ -1,15 +1,32 @@
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import './BottomBar.css'
 
-function BottomBar({ current, total = 21
-    , nextPath, prevPath, onNext }) {
+function BottomBar({ current, total = 21, nextPath, prevPath, onSave, onFinish, onNext }) {
     const navigate = useNavigate()
+    const location = useLocation()
+    const [busy, setBusy] = useState(false)
 
-    const handleNextClick = () => {
-        if (onNext) {
-            onNext()        
-        } else if (nextPath) {
-            navigate(nextPath) 
+    const go = async (path, finish) => {
+        if (busy) return
+        setBusy(true)
+        try {
+            if (onSave) await onSave()
+            if (finish && onFinish) await onFinish()
+            if (finish && onNext) {
+                onNext()
+                return
+            }
+            if (path) {
+                navigate({
+                    pathname: path,
+                    search: path === '/' ? '' : location.search,
+                })
+            }
+        } catch (error) {
+            window.alert(error.message || 'Не удалось сохранить')
+        } finally {
+            setBusy(false)
         }
     }
 
@@ -25,7 +42,8 @@ function BottomBar({ current, total = 21
                 {prevPath && (
                     <button
                         className="bottom-bar__btn"
-                        onClick={() => navigate(prevPath)}
+                        onClick={() => go(prevPath, false)}
+                        disabled={busy}
                     >
                         ← Вернуть на этап назад
                     </button>
@@ -35,8 +53,9 @@ function BottomBar({ current, total = 21
             <div className="bottom-bar__col">
                 <button
                     className="bottom-bar__close"
-                    onClick={() => navigate('/')}
+                    onClick={() => go('/', false)}
                     title="На главную"
+                    disabled={busy}
                 >
                     ✕
                 </button>
@@ -45,10 +64,10 @@ function BottomBar({ current, total = 21
             <div className="bottom-bar__col">
                 <button
                     className="bottom-bar__btn"
-                    onClick={handleNextClick}
-                    disabled={!nextPath && !onNext}
+                    onClick={() => go(nextPath, true)}
+                    disabled={busy || (!nextPath && !onNext)}
                 >
-                    Далее →
+                    {busy ? 'Сохранение...' : 'Далее →'}
                 </button>
             </div>
         </div>

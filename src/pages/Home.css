@@ -1,6 +1,23 @@
 .home {
     text-align: center;
     padding: 40px;
+    position: relative;
+}
+
+.home__review {
+    position: absolute;
+    top: 14px;
+    left: 18px;
+    border: none;
+    background: none;
+    color: #8eadd4;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.home__review:hover {
+    color: #4d79b5;
 }
 
 .home__buttons {
@@ -26,4 +43,88 @@
 
 .home__button:active {
     transform: scale(0.97);
+}
+
+.home__filters {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+.home__chip {
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 999px;
+    padding: 6px 14px;
+    cursor: pointer;
+}
+
+.home__chip--active {
+    border-color: #2ecc71;
+    background: #eafaf1;
+}
+
+.card-list {
+    max-width: 860px;
+    margin: 28px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+}
+
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 16px;
+    background: #fff;
+}
+
+.product-card__main h2 {
+    margin: 0 0 8px;
+    font-size: 22px;
+}
+
+.product-card__main p {
+    margin-bottom: 4px;
+}
+
+.product-card__meta {
+    color: #666;
+    font-size: 14px;
+}
+
+.product-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.variation-form,
+.variation-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.variation-form .input,
+.variation-row .input {
+    flex: 1;
+    min-width: 140px;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.variations {
+    margin-top: 16px;
+    text-align: left;
+}
+
+.variation-add {
+    font-size: 16px;
+    padding: 8px 16px;
 }

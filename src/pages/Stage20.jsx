@@ -1,81 +1,80 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import BottomBar from '../components/BottomBar'
+import { productsApi } from '../api'
+import { blankWarehouse, composeAddress, pointsFrom, pointsPayload, useCardIds, warehouseFormFrom } from '../cardScope'
 import './Stage20.css'
 
 function Stage20() {
-    const [addresses, setAddresses] = useState([
-        {
-            id: 1,
-            address: 'г. Екатеринбург, ул. Вайнера, д. 22, офис 304',
-            active: true,
-            quantity: '',
-        },
-        {
-            id: 2,
-            address: 'г. Екатеринбург, ул. Шейкмана, д. 6, офис 114',
-            active: false,
-            quantity: '',
-        },
-    ])
+    const { productId, variationId } = useCardIds()
+    const [addresses, setAddresses] = useState([])
+    const [loaded, setLoaded] = useState(false)
+    const [error, setError] = useState('')
+
+    useEffect(() => {
+        if (!productId) return
+        productsApi.get(productId).then((product) => {
+            const catalog = pointsFrom(product, null)
+            const own = variationId ? pointsFrom(product, variationId) : []
+            const ownById = new Map(own.map((item) => [item.id, item]))
+            setAddresses(variationId
+                ? catalog.map((item) => {
+                    const stock = ownById.get(item.id)
+                    return {
+                        ...item,
+                        active: stock ? stock.active : false,
+                        quantity: stock?.quantity || '',
+                    }
+                })
+                : catalog)
+            setLoaded(true)
+        }).catch((loadError) => setError(loadError.message))
+    }, [productId, variationId])
+
+    const save = () => {
+        if (!productId) throw new Error('Сначала создайте карточку на главной странице')
+        if (!loaded) throw new Error('Карточка ещё загружается, подождите секунду')
+        return productsApi.saveShipments(productId, {
+            variationId: variationId || null,
+            items: pointsPayload(addresses),
+        })
+    }
 
     const [showForm, setShowForm] = useState(false)
-
-    const [newAddress, setNewAddress] = useState({
-        name: '',
-        index: '',
-        region: '',
-        city: '',
-        street: '',
-        house: '',
-        office: '',
-    })
+    const [editingId, setEditingId] = useState(null)
+    const [newAddress, setNewAddress] = useState(blankWarehouse)
 
     const handleNewAddressChange = (field, value) => {
         setNewAddress((prev) => ({ ...prev, [field]: value }))
     }
 
-    const handleSaveAddress = () => {
-        const parts = []
-        if (newAddress.city) parts.push(`г. ${newAddress.city}`)
-        if (newAddress.street) parts.push(`ул. ${newAddress.street}`)
-        if (newAddress.house) parts.push(`д. ${newAddress.house}`)
-        if (newAddress.office) parts.push(`офис ${newAddress.office}`)
-
-        const addressString = parts.join(', ') || 'Новый склад'
-
-        setAddresses((prev) => [
-            ...prev,
-            {
-                id: Date.now(),
-                address: addressString,
-                active: true,
-                quantity: '',
-            },
-        ])
-
-        setNewAddress({
-            name: '',
-            index: '',
-            region: '',
-            city: '',
-            street: '',
-            house: '',
-            office: '',
-        })
+    const closeForm = () => {
+        setNewAddress(blankWarehouse())
+        setEditingId(null)
         setShowForm(false)
     }
 
-    const handleCancel = () => {
-        setNewAddress({
-            name: '',
-            index: '',
-            region: '',
-            city: '',
-            street: '',
-            house: '',
-            office: '',
+    const handleSaveAddress = () => {
+        const stored = {
+            address: composeAddress(newAddress),
+            name: newAddress.name,
+            postalCode: newAddress.index,
+            region: newAddress.region,
+            city: newAddress.city,
+            street: newAddress.street,
+            house: newAddress.house,
+            office: newAddress.office,
+        }
+        setAddresses((prev) => {
+            if (editingId == null) {
+                return [...prev, { id: Date.now(), active: true, quantity: '', ...stored }]
+            }
+            return prev.map((item) => (item.id === editingId ? { ...item, ...stored } : item))
         })
-        setShowForm(false)
+        closeForm()
+    }
+
+    const handleCancel = () => {
+        closeForm()
     }
 
     const toggleAddress = (id) => {
@@ -90,26 +89,37 @@ function Stage20() {
         )
     }
 
+    const openNewAddress = () => {
+        if (showForm && editingId == null) {
+            closeForm()
+            return
+        }
+        setEditingId(null)
+        setNewAddress(blankWarehouse())
+        setShowForm(true)
+    }
+
     const editAddress = (id) => {
-        const current = addresses.find((a) => a.id === id)
-        const newAddr = prompt('Введите адрес:', current.address)
-        if (newAddr === null) return
-        setAddresses((prev) =>
-            prev.map((a) => (a.id === id ? { ...a, address: newAddr } : a))
-        )
+        const current = addresses.find((item) => item.id === id)
+        if (!current) return
+        setNewAddress(warehouseFormFrom(current))
+        setEditingId(id)
+        setShowForm(true)
     }
 
     return (
         <>
             <div className="container">
                 <h1 className="title">Этап 20. Доставка</h1>
+                {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
+                {error && <p className="form-error">{error}</p>}
 
                 <h2 className="subtitle">Количество товара на складе</h2>
 
                 <button
                     className="add-address-btn"
                     type="button"
-                    onClick={() => setShowForm((prev) => !prev)}
+                    onClick={openNewAddress}
                 >
                     <span className="add-address-btn__icon">＋</span>
                     <span className="add-address-btn__text">Добавить адрес отгрузки</span>
@@ -236,7 +246,7 @@ function Stage20() {
                 </div>
             </div>
 
-            <BottomBar current={20} total={21} prevPath="/stage19" nextPath="/stage21" />
+            <BottomBar current={20} total={21} prevPath="/stage19" nextPath="/stage21" onSave={save} />
         </>
     )
 }

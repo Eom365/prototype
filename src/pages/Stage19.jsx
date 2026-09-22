@@ -1,21 +1,46 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import BottomBar from '../components/BottomBar'
+import { productsApi } from '../api'
+import { discountsFrom, emptyDiscounts, useCardIds } from '../cardScope'
 import './Stage19.css'
 
 function Stage19() {
+    const { productId, variationId } = useCardIds()
     const [currency, setCurrency] = useState('RUB')
     const [price, setPrice] = useState('')
+    const [loaded, setLoaded] = useState(false)
+    const [error, setError] = useState('')
 
     const currencySymbols = {
         RUB: '₽',
         CNY: '¥',
     }
 
-    const [discounts, setDiscounts] = useState([
-        { enabled: true, from: '', to: '', value: '' },
-        { enabled: true, from: '', to: '', value: '' },
-        { enabled: true, from: '', to: '', value: '' },
-    ])
+    const [discounts, setDiscounts] = useState(emptyDiscounts)
+
+    useEffect(() => {
+        if (!productId || !variationId) return
+        productsApi.get(productId).then((product) => {
+            const variation = (product.variations || []).find((item) => item.id === variationId)
+            if (!variation) throw new Error('Вариация не найдена')
+            setCurrency(variation.currency || 'RUB')
+            setPrice(variation.price || '')
+            setDiscounts(discountsFrom(product, variationId))
+            setLoaded(true)
+        }).catch((loadError) => setError(loadError.message))
+    }, [productId, variationId])
+
+    const save = () => {
+        if (!productId) throw new Error('Сначала создайте карточку на главной странице')
+        if (!variationId) throw new Error('Сначала создайте вариант на этапе 13')
+        if (!loaded) throw new Error('Карточка ещё загружается, подождите секунду')
+        return productsApi.savePrice(productId, {
+            variationId,
+            currency,
+            price,
+            discounts,
+        })
+    }
 
     const handleDiscountChange = (index, field, value) => {
         setDiscounts((prev) =>
@@ -39,6 +64,9 @@ function Stage19() {
                 <h1 className="title">
                     Этап 19. Добавьте стоимость товара и систему лояльности
                 </h1>
+                {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
+                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 13.</p>}
+                {error && <p className="form-error">{error}</p>}
 
                 {/* ===== Стоимость товара ===== */}
                 <div className="section">
@@ -144,7 +172,7 @@ function Stage19() {
                 </div>
             </div>
 
-            <BottomBar current={19} total={21} prevPath="/stage18" nextPath="/stage20" />
+            <BottomBar current={19} total={21} prevPath="/stage18" nextPath="/stage20" onSave={save} />
         </>
     )
 }

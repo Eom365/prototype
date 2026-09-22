@@ -1,8 +1,26 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { productsApi } from '../api'
 import './Stage12.css'
 
 function Stage12() {
     const navigate = useNavigate()
+    const location = useLocation()
+    const [params] = useSearchParams()
+    const productId = params.get('id')
+    const go = (path) => navigate({ pathname: path, search: path === '/' ? '' : location.search })
+
+    const choose = async (wantsVariants) => {
+        if (!productId) {
+            window.alert('Сначала создайте карточку на главной странице')
+            return
+        }
+        try {
+            await productsApi.saveWantsVariants(productId, { wantsVariants })
+            go(wantsVariants ? '/stage13' : '/')
+        } catch (error) {
+            window.alert(error.message || 'Не удалось сохранить')
+        }
+    }
 
     return (
         <>
@@ -25,7 +43,7 @@ function Stage12() {
                 <button
                     type="button"
                     className="action-btn action-btn--no"
-                    onClick={() => navigate('/')}
+                    onClick={() => choose(false)}
                     title="Нет"
                 >
                     <span className="action-btn__circle">✕</span>
@@ -34,7 +52,7 @@ function Stage12() {
                 <button
                     type="button"
                     className="action-btn action-btn--yes"
-                    onClick={() => navigate('/stage13')}
+                    onClick={() => choose(true)}
                     title="Да"
                 >
                     <span className="action-btn__circle">✓</span>

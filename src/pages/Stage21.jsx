@@ -1,10 +1,12 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { productsApi } from '../api'
 import BottomBar from '../components/BottomBar'
 import './Stage21.css'
 
 function Stage21() {
     const navigate = useNavigate()
+    const location = useLocation()
     const [showModal, setShowModal] = useState(false)
 
     const handleNext = () => {
@@ -41,9 +43,18 @@ function Stage21() {
                         <button
                             type="button"
                             className="modal__btn"
-                            onClick={() => {
+                            onClick={async () => {
                                 localStorage.setItem('variantCompleted', 'true')
-                                navigate('/stage13')
+                                const id = new URLSearchParams(location.search).get('id')
+                                if (id) {
+                                    try {
+                                        await productsApi.complete(id)
+                                    } catch (error) {
+                                        window.alert(error.message || 'Не удалось сохранить карточку')
+                                        return
+                                    }
+                                }
+                                navigate({ pathname: '/stage13', search: location.search })
                             }}
                         >
                             Понятно

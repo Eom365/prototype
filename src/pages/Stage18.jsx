@@ -1,36 +1,58 @@
-import { useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import BottomBar from '../components/BottomBar'
+import PhotoGallery from '../components/PhotoGallery'
+import { productsApi } from '../api'
+import { useCardIds } from '../cardScope'
 import './Stage18.css'
 
-const MAX_PHOTOS = 5
-
 function Stage18() {
+    const { productId, variationId } = useCardIds()
     const [packType, setPackType] = useState('')
     const [material, setMaterial] = useState('')
     const [materialCustom, setMaterialCustom] = useState('')
+    const [loaded, setLoaded] = useState(false)
+    const [error, setError] = useState('')
     const [sizeUnit, setSizeUnit] = useState('sm')
     const [sizes, setSizes] = useState({
         length: '',
         width: '',
         height: '',
     })
-    const [photos, setPhotos] = useState([])
-    const fileInputRef = useRef(null)
+    useEffect(() => {
+        if (!productId || !variationId) return
+        productsApi.get(productId).then((product) => {
+            const variation = (product.variations || []).find((item) => item.id === variationId)
+            if (!variation) throw new Error('Вариация не найдена')
+            setPackType(variation.packType || '')
+            setMaterial(variation.packMaterial || '')
+            setMaterialCustom(variation.packMaterialCustom || '')
+            setSizeUnit(variation.packSizeUnit || 'sm')
+            setSizes({
+                length: variation.packLength || '',
+                width: variation.packWidth || '',
+                height: variation.packHeight || '',
+            })
+            setLoaded(true)
+        }).catch((loadError) => setError(loadError.message))
+    }, [productId, variationId])
 
     const handleSizeChange = (name, value) => {
         setSizes((prev) => ({ ...prev, [name]: value }))
     }
 
-    const handleAddPhoto = () => {
-        fileInputRef.current?.click()
-    }
-
-    const handlePhotoChange = (e) => {
-        const file = e.target.files?.[0]
-        if (!file) return
-        const url = URL.createObjectURL(file)
-        setPhotos((prev) => [...prev, { id: Date.now(), url, name: file.name }])
-        e.target.value = ''
+    const save = () => {
+        if (!productId) throw new Error('Сначала создайте карточку на главной странице')
+        if (!variationId) throw new Error('Сначала создайте вариант на этапе 13')
+        if (!loaded) throw new Error('Карточка ещё загружается, подождите секунду')
+        return productsApi.saveVariationPackaging(productId, variationId, {
+            packType,
+            packMaterial: material,
+            packMaterialCustom: materialCustom,
+            packSizeUnit: sizeUnit,
+            packLength: sizes.length,
+            packWidth: sizes.width,
+            packHeight: sizes.height,
+        })
     }
 
     const selectPackType = (value) => {
@@ -42,6 +64,9 @@ function Stage18() {
         <>
             <div className="container">
                 <h1 className="title">Этап 18. Добавьте упаковку</h1>
+                {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
+                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 13.</p>}
+                {error && <p className="form-error">{error}</p>}
 
                 {/* Вид упаковки */}
                 <div className="section">
@@ -305,48 +330,13 @@ function Stage18() {
                 <div className="section">
                     <h2 className="subtitle">Добавьте фотографии упаковки:</h2>
 
-                    <input
-                        type="file"
-                        accept="image/*"
-                        ref={fileInputRef}
-                        onChange={handlePhotoChange}
-                        style={{ display: 'none' }}
-                    />
-
-                    <button
-                        className="add-photo-btn"
-                        onClick={handleAddPhoto}
-                        disabled={photos.length >= MAX_PHOTOS}
-                    >
-                        <span className="add-photo-btn__icon">＋</span>
-                        <span className="add-photo-btn__text">Добавить фотографию</span>
-                    </button>
-
-                    <div className="gallery">
-                        <div className="slot--big">
-                            {photos[0] && (
-                                <img src={photos[0].url} alt={photos[0].name} className="slot__img" />
-                            )}
-                        </div>
-
-                        <div className="slots-small">
-                            {[1, 2, 3, 4].map((index) => (
-                                <div key={index} className="slot--small">
-                                    {photos[index] && (
-                                        <img
-                                            src={photos[index].url}
-                                            alt={photos[index].name}
-                                            className="slot__img"
-                                        />
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    {productId && variationId && (
+                        <PhotoGallery productId={productId} role="package" variationId={variationId} />
+                    )}
                 </div>
             </div>
 
-            <BottomBar current={18} total={21} prevPath="/stage17" nextPath="/stage19" />
+            <BottomBar current={18} total={21} prevPath="/stage17" nextPath="/stage19" onSave={save} />
         </>
     )
 }

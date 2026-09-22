@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import BottomBar from '../components/BottomBar'
 import './Stage11.css'
 
 function Stage11() {
     const navigate = useNavigate()
+    const location = useLocation()
     const [showModal, setShowModal] = useState(false)
 
     const handleNext = () => {
@@ -42,7 +43,7 @@ function Stage11() {
                         <button
                             type="button"
                             className="modal__btn"
-                            onClick={() => navigate('/stage12')}
+                            onClick={() => navigate({ pathname: '/stage12', search: location.search })}
                         >
                             Понятно
                         </button>

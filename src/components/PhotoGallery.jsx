@@ -1,0 +1,122 @@
+import { useEffect, useRef, useState } from 'react'
+import { productsApi } from '../api'
+
+function PhotoGallery({ productId, role, variationId = null, buttonLabel = 'Добавить фотографию' }) {
+    const [photos, setPhotos] = useState([])
+    const [error, setError] = useState('')
+    const fileInputRef = useRef(null)
+    const maxPhotos = 5
+
+    const load = async () => {
+        const product = await productsApi.get(productId)
+        setPhotos(
+            (product.files || [])
+                .filter((file) => file.role === role && (variationId ? file.variationId === variationId : !file.variationId))
+                .sort((a, b) => a.sortOrder - b.sortOrder)
+        )
+    }
+
+    useEffect(() => {
+        if (!productId) return
+        load().catch((loadError) => setError(loadError.message))
+    }, [productId, role, variationId])
+
+    const handleFileChange = async (event) => {
+        const file = event.target.files?.[0]
+        event.target.value = ''
+        if (!file || !productId) return
+
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('role', role)
+        if (variationId) formData.append('variationId', variationId)
+        setError('')
+        try {
+            await productsApi.upload(productId, formData)
+            await load()
+        } catch (uploadError) {
+            setError(uploadError.message)
+        }
+    }
+
+    const handleRemove = async (fileId) => {
+        setError('')
+        try {
+            await productsApi.deleteFile(fileId)
+            await load()
+        } catch (removeError) {
+            setError(removeError.message)
+        }
+    }
+
+    return (
+        <>
+            <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+            />
+
+            <button
+                className="add-photo-btn"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={!productId || photos.length >= maxPhotos}
+            >
+                <span className="add-photo-btn__icon">＋</span>
+                <span className="add-photo-btn__text">
+                    {photos.length >= maxPhotos
+                        ? `Все ${maxPhotos} фото добавлены`
+                        : `${buttonLabel} (${photos.length}/${maxPhotos})`}
+                </span>
+            </button>
+
+            {error && <p className="form-error">{error}</p>}
+
+            <div className="gallery">
+                <div className="slot--big">
+                    {photos[0] && (
+                        <>
+                            <img src={photos[0].url} alt={photos[0].name} className="slot__img" />
+                            <button
+                                type="button"
+                                className="slot__remove"
+                                onClick={() => handleRemove(photos[0].id)}
+                                title="Удалить"
+                            >
+                                ✕
+                            </button>
+                        </>
+                    )}
+                </div>
+
+                <div className="slots-small">
+                    {[1, 2, 3, 4].map((index) => (
+                        <div key={index} className="slot--small">
+                            {photos[index] && (
+                                <>
+                                    <img
+                                        src={photos[index].url}
+                                        alt={photos[index].name}
+                                        className="slot__img"
+                                    />
+                                    <button
+                                        type="button"
+                                        className="slot__remove"
+                                        onClick={() => handleRemove(photos[index].id)}
+                                        title="Удалить"
+                                    >
+                                        ✕
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </>
+    )
+}
+
+export default PhotoGallery

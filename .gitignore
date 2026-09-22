@@ -12,6 +12,16 @@ dist
 dist-ssr
 *.local
 
+# backend
+backend/**/bin/
+backend/**/obj/
+backend/**/data/*.db
+backend/**/data/*.db-*
+backend/**/data/files/
+
+# личная пометка, в git не попадает
+FRONTEND-CHANGES.private.txt
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

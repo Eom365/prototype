@@ -1,83 +1,123 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import BottomBar from '../components/BottomBar'
+import { productsApi } from '../api'
 import './Stage1.css'
 
+const emptyFields = {
+    authorLastName: '',
+    authorFirstName: '',
+    authorMiddleName: '',
+    tradeName: '',
+    brandName: '',
+    manufacturerName: '',
+    manufacturerCountry: '',
+    productIdentifier: '',
+    internalArticle: '',
+}
+
 function Stage1() {
-    const [user, setUser] = useState({
-        lastName: '',
-        firstName: '',
-        middleName: '',
-    })
+    const [params] = useSearchParams()
+    const productId = params.get('id')
+    const [fields, setFields] = useState(emptyFields)
+    const [matches, setMatches] = useState([])
+    const [error, setError] = useState('')
+    const [loaded, setLoaded] = useState(false)
 
-    const [fields, setFields] = useState({
-        field1: '',
-        field2: '',
-        field3: '',
-        field4: '',
-        field5: '',
-        field6: '',
-    })
+    useEffect(() => {
+        if (!productId) return
+        productsApi.get(productId).then((product) => {
+            setFields({
+                authorLastName: product.authorLastName || '',
+                authorFirstName: product.authorFirstName || '',
+                authorMiddleName: product.authorMiddleName || '',
+                tradeName: product.tradeName || '',
+                brandName: product.brandName || '',
+                manufacturerName: product.manufacturerName || '',
+                manufacturerCountry: product.manufacturerCountry || '',
+                productIdentifier: product.productIdentifier || '',
+                internalArticle: product.internalArticle || '',
+            })
+            setLoaded(true)
+        }).catch((loadError) => setError(loadError.message))
+    }, [productId])
 
-    const handleUserChange = (name, value) => {
-        setUser((prev) => ({ ...prev, [name]: value }))
-    }
+    useEffect(() => {
+        if (!productId) return undefined
+        const timer = setTimeout(() => {
+            const query = new URLSearchParams()
+            query.set('excludeId', productId)
+            if (fields.tradeName) query.set('tradeName', fields.tradeName)
+            if (fields.brandName) query.set('brandName', fields.brandName)
+            if (fields.manufacturerName) query.set('manufacturerName', fields.manufacturerName)
+            if (fields.manufacturerCountry) query.set('manufacturerCountry', fields.manufacturerCountry)
+            if (fields.productIdentifier) query.set('productIdentifier', fields.productIdentifier)
+            if (fields.internalArticle) query.set('internalArticle', fields.internalArticle)
+            productsApi.matches(query.toString()).then(setMatches).catch(() => setMatches([]))
+        }, 400)
+        return () => clearTimeout(timer)
+    }, [fields, productId])
 
     const handleChange = (name, value) => {
         setFields((prev) => ({ ...prev, [name]: value }))
     }
 
+    const save = () => {
+        if (!productId) throw new Error('Сначала создайте карточку на главной странице')
+        if (!loaded) throw new Error('Карточка ещё загружается, подождите секунду')
+        return productsApi.saveIdentity(productId, fields)
+    }
+
     return (
         <>
             <div className="container">
-                <h1 className="title">Заполните информацию о себе:</h1>
-
+                <h1 className="title">Заполните информацию о себе</h1>
                 <div className="form">
                     <div className="field">
                         <label className="label">Фамилия</label>
                         <input
                             type="text"
-                            value={user.lastName}
-                            onChange={(e) => handleUserChange('lastName', e.target.value)}
+                            value={fields.authorLastName}
+                            onChange={(event) => handleChange('authorLastName', event.target.value)}
                             className="input"
-                            placeholder="Введите фамилию..."
+                            placeholder="Введите значение..."
                         />
                     </div>
-
                     <div className="field">
                         <label className="label">Имя</label>
                         <input
                             type="text"
-                            value={user.firstName}
-                            onChange={(e) => handleUserChange('firstName', e.target.value)}
+                            value={fields.authorFirstName}
+                            onChange={(event) => handleChange('authorFirstName', event.target.value)}
                             className="input"
-                            placeholder="Введите имя..."
+                            placeholder="Введите значение..."
                         />
                     </div>
-
                     <div className="field">
                         <label className="label">Отчество</label>
                         <input
                             type="text"
-                            value={user.middleName}
-                            onChange={(e) => handleUserChange('middleName', e.target.value)}
+                            value={fields.authorMiddleName}
+                            onChange={(event) => handleChange('authorMiddleName', event.target.value)}
                             className="input"
-                            placeholder="Введите отчество..."
+                            placeholder="Введите значение..."
                         />
                     </div>
                 </div>
 
                 <h1 className="title">Проверка идентичности товара</h1>
-                <h2 className="subtitle">
-                    Этап 1 — Введите информацию о товаре для поиска совпадений среди существующих карточек товаров
-                </h2>
+                <h2 className="subtitle">Этап 1 - Введите информацию о товаре для поиска совпадений среди существующих карточек товаров</h2>
+
+                {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
+                {error && <p className="form-error">{error}</p>}
 
                 <div className="form">
                     <div className="field">
                         <label className="label">Фирменное наименование продукта</label>
                         <input
                             type="text"
-                            value={fields.field1}
-                            onChange={(e) => handleChange('field1', e.target.value)}
+                            value={fields.tradeName}
+                            onChange={(event) => handleChange('tradeName', event.target.value)}
                             className="input"
                             placeholder="Введите значение..."
                         />
@@ -87,8 +127,8 @@ function Stage1() {
                         <label className="label">Наименование бренда</label>
                         <input
                             type="text"
-                            value={fields.field2}
-                            onChange={(e) => handleChange('field2', e.target.value)}
+                            value={fields.brandName}
+                            onChange={(event) => handleChange('brandName', event.target.value)}
                             className="input"
                             placeholder="Введите значение..."
                         />
@@ -98,8 +138,8 @@ function Stage1() {
                         <label className="label">Производитель товара</label>
                         <input
                             type="text"
-                            value={fields.field3}
-                            onChange={(e) => handleChange('field3', e.target.value)}
+                            value={fields.manufacturerName}
+                            onChange={(event) => handleChange('manufacturerName', event.target.value)}
                             className="input"
                             placeholder="Введите значение..."
                         />
@@ -109,8 +149,8 @@ function Stage1() {
                         <label className="label">Страна производителя</label>
                         <input
                             type="text"
-                            value={fields.field4}
-                            onChange={(e) => handleChange('field4', e.target.value)}
+                            value={fields.manufacturerCountry}
+                            onChange={(event) => handleChange('manufacturerCountry', event.target.value)}
                             className="input"
                             placeholder="Введите значение..."
                         />
@@ -120,27 +160,39 @@ function Stage1() {
                         <label className="label">Идентификатор товара</label>
                         <input
                             type="text"
-                            value={fields.field5}
-                            onChange={(e) => handleChange('field5', e.target.value)}
+                            value={fields.productIdentifier}
+                            onChange={(event) => handleChange('productIdentifier', event.target.value)}
                             className="input"
                             placeholder="Введите значение..."
                         />
                     </div>
-
                     <div className="field">
                         <label className="label">Внутренний артикул производителя</label>
                         <input
                             type="text"
-                            value={fields.field6}
-                            onChange={(e) => handleChange('field6', e.target.value)}
+                            value={fields.internalArticle}
+                            onChange={(event) => handleChange('internalArticle', event.target.value)}
                             className="input"
                             placeholder="Введите значение..."
                         />
                     </div>
                 </div>
+
+                {matches.length > 0 && (
+                    <div className="matches">
+                        <h3>Похожие карточки</h3>
+                        {matches.map((match) => (
+                            <div className="match-card" key={match.id}>
+                                <strong>{match.title}</strong>
+                                <span>{match.status === 'ready' ? 'Готово' : 'Черновик'}</span>
+                                <p>Совпало: {match.reasons.join(', ')}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
-            <BottomBar current={1} total={21} nextPath="/stage2" />
+            <BottomBar current={1} total={21} nextPath="/stage2" onSave={save} />
         </>
     )
 }

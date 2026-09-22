@@ -55,3 +55,25 @@
     color: #fff;
     width: 100%;
 }
+
+.subtitle {
+    text-align: left;
+    font-weight: normal;
+    font-size: 16px;
+    margin-bottom: 24px;
+}
+
+.matches {
+    margin-top: 28px;
+    text-align: left;
+}
+
+.match-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
