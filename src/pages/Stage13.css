@@ -1,0 +1,894 @@
+/* ===== Основной контейнер ===== */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px 100px;
+    box-sizing: border-box;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.info-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid #666;
+    color: #666;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: help;
+    flex-shrink: 0;
+}
+
+.description {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+/* ===== Чекбоксы ===== */
+.feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.feature-item__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+}
+
+.checkbox {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.checkbox--checked {
+    background: #2c3ecc;
+    border-color: #2c3ecc;
+}
+
+.checkbox__tick {
+    display: block;
+}
+
+.feature-item__label {
+    font-size: 15px;
+    color: #333;
+    white-space: nowrap;
+}
+
+.feature-item .info-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    margin-left: 6px;
+    border-color: #999;
+    color: #999;
+}
+
+/* ===== Блок "Заполните варианты" ===== */
+.variants-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px 120px;
+    box-sizing: border-box;
+}
+
+.variants-title {
+    font-size: 17px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.variants-description {
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+/* ===== Таблица ===== */
+.variants-table {
+    border: 1.5px solid #333;
+    border-radius: 10px;
+    padding: 12px 16px;
+    background: #fff;
+    margin-bottom: 20px;
+}
+
+.variant-row {
+    display: grid;
+    grid-template-columns: 180px 220px 1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.variant-row:last-child {
+    border-bottom: none;
+}
+
+.variant-row__name {
+    font-size: 14px;
+    color: #333;
+}
+
+.variant-row__input {
+    padding: 5px 8px;
+    font-size: 14px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+.variant-row__input:focus {
+    border-color: #2ecc71;
+}
+
+.variant-row__select {
+    padding: 5px 8px;
+    font-size: 14px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    outline: none;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.variant-row__select:focus {
+    border-color: #2ecc71;
+}
+
+/* ===== Плашки ===== */
+.variant-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.variant-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    background: #fff;
+    font-size: 13px;
+    color: #333;
+    white-space: nowrap;
+}
+
+.variant-chip__info {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid #999;
+    color: #999;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-style: italic;
+    cursor: help;
+    flex-shrink: 0;
+}
+
+.variant-chip__remove {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.variant-chip__remove:hover {
+    color: #c0392b;
+}
+
+/* ===== Кнопки ===== */
+.variants-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.action-primary {
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    background: #d1e231;
+    color: #000;
+    border: 1.5px solid #2c3ecc;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.action-primary:hover {
+    background: #bcd32c;
+}
+
+.action-secondary {
+    padding: 12px 18px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #eef1ff;
+    color: #2c3ecc;
+    border: 1.5px solid #2c3ecc;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.action-secondary:hover {
+    background: #dde3ff;
+}
+
+.info-icon--white {
+    border-color: #fff;
+    color: #fff;
+}
+
+/* ===== Блок "Ваши варианты товара" ===== */
+.variants-preview {
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+
+.variants-preview__title {
+    font-size: 17px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.variants-preview__description {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+/* ===== Карточка товара ===== */
+.product-card {
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 16px;
+    background: #fff;
+    margin-bottom: 20px;
+}
+
+.product-card__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 14px;
+    border-bottom: 1.5px solid #2ecc71;
+    margin-bottom: 16px;
+}
+
+.product-card__chip {
+    padding: 6px 14px;
+    font-size: 14px;
+    color: #333;
+    background: #fff;
+    border: 1px solid #333;
+    border-radius: 6px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.product-card__chip-info {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid #999;
+    color: #999;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-style: italic;
+    cursor: help;
+    flex-shrink: 0;
+}
+
+.product-card__body {
+    display: grid;
+    grid-template-columns: 160px 200px 1fr 1fr 100px;
+    gap: 0;
+    align-items: start;
+}
+
+.product-card__col {
+    padding: 0 16px;
+    border-right: 1.5px solid #2ecc71;
+    min-height: 200px;
+}
+
+.product-card__col:last-child {
+    border-right: none;
+    padding-right: 0;
+}
+
+.product-card__col:first-child {
+    padding-left: 0;
+}
+
+/* Колонка 1: Статус */
+.product-card__col--status {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.product-card__status-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.product-card__status-label {
+    font-size: 13px;
+    color: #333;
+}
+
+.product-card__edit {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid #2c3ecc;
+    background: #fff;
+    color: #2c3ecc;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.product-card__edit:hover {
+    background: #eef1ff;
+}
+
+.product-card__delete {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid #e74c3c;
+    background: #fff;
+    color: #e74c3c;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 12px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.product-card__delete:hover {
+    background: #fdecea;
+}
+
+.product-card__preview-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    color: #2c6ecc;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+}
+
+.product-card__preview-link:hover {
+    text-decoration: underline;
+}
+
+/* Колонка 2: Фото */
+.product-card__col--photo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.product-card__photo {
+    width: 140px;
+    height: 180px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fafafa;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-card__photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-card__photo-btn {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    font-size: 32px;
+    color: #999;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.product-card__nav {
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 20px;
+    line-height: 1;
+    color: #2ecc71;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    flex-shrink: 0;
+    z-index: 2;
+}
+
+.variant-card__address {
+    display: block;
+    margin-top: 4px;
+    color: #666;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.variant-card__decide {
+    display: flex;
+    gap: 0;
+    margin: 8px 16px 18px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.decide {
+    flex: 1;
+    border: none;
+    padding: 14px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.decide--no {
+    background: #f39c12;
+    color: #fff;
+}
+
+.decide--yes {
+    background: #2ecc71;
+    color: #fff;
+}
+
+.product-card__nav:hover {
+    color: #27ae60;
+}
+
+.product-card__counter {
+    position: absolute;
+    bottom: 4px;
+    font-size: 11px;
+    color: #666;
+}
+
+.product-card__counter--left {
+    left: 4px;
+}
+
+.product-card__counter--right {
+    right: 4px;
+}
+
+/* Колонка 3: Информация */
+.product-card__col--info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.product-card__name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.product-card__desc {
+    font-size: 13px;
+    color: #555;
+    margin: 0;
+}
+
+.product-card__line {
+    font-size: 13px;
+    color: #555;
+    margin: 0;
+}
+
+.product-card__article-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+}
+
+.product-card__article {
+    font-size: 13px;
+    color: #333;
+}
+
+/* Колонка 4: Адрес */
+.product-card__col--address {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.product-card__address-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.product-card__address {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.4;
+    margin: 0;
+    display: flex;
+    gap: 4px;
+}
+
+.product-card__bullet {
+    color: #333;
+    flex-shrink: 0;
+}
+
+.product-card__quantity {
+    font-size: 13px;
+    color: #333;
+    margin: 0;
+}
+
+.product-card__warehouse + .product-card__warehouse {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+/* Колонка 5: Цена */
+.product-card__col--price {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    justify-content: flex-start;
+    padding-top: 20px;
+}
+
+.product-card__price-symbol {
+    font-size: 16px;
+    font-weight: bold;
+    color: #c0392b;
+}
+
+.product-card__price-value {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* ===== Карточка-заготовка ===== */
+.variant-card {
+    margin-top: 30px;
+    border: 2px solid #2c3ecc;
+    border-radius: 12px;
+    padding: 16px;
+    background: #fff;
+}
+
+.variant-card__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 16px;
+}
+
+.variant-card__status {
+    padding: 5px 12px;
+    font-size: 13px;
+    color: #c0392b;
+    background: #fdecea;
+    border: 1px solid #f5b7b1;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.variant-card__chip {
+    padding: 5px 12px;
+    font-size: 13px;
+    color: #333;
+    background: #fff;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.variant-card__chip-info {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid #999;
+    color: #999;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-style: italic;
+    cursor: help;
+    flex-shrink: 0;
+}
+
+.variant-card__body {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 16px;
+    align-items: stretch;
+}
+
+.variant-card__photo {
+    border: 2px solid #333;
+    border-radius: 12px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-height: 240px;
+}
+
+.variant-card__photo-btn {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    font-size: 48px;
+    font-weight: bold;
+    color: #5b2c0f;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    font-family: inherit;
+}
+
+.variant-card__photo-btn:hover {
+    background: #fafafa;
+}
+
+.variant-card__sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    height: 100%;
+}
+
+.variant-card__col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+}
+
+.variant-card__section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    border: 1.5px solid #333;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    background: #fff;
+    color: #333;
+    transition: background 0.2s;
+    flex: 1;
+}
+
+.variant-card__section--pending {
+    background: #fdecea;
+    border-color: #f5b7b1;
+}
+
+.variant-card__section--pending:hover {
+    background: #fadbd8;
+}
+
+.variant-card__section--preview {
+    background: #eafaf1;
+    border-color: #2ecc71;
+    align-items: flex-start;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    flex: 2;
+}
+
+.variant-card__section--preview:hover {
+    background: #d5f5e3;
+}
+
+.variant-card__arrow {
+    font-size: 18px;
+    font-weight: bold;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+/* ===== Toggle ===== */
+.toggle {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    border-radius: 12px;
+    border: none;
+    background: #ccc;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: background 0.25s ease;
+}
+
+.toggle--on {
+    background: #2ecc71;
+}
+
+.toggle__knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.25s ease;
+}
+
+.toggle--on .toggle__knob {
+    transform: translateX(20px);
+}
+
+/* ===== Карточка "заполнена" (зелёная) ===== */
+.variant-card--completed {
+    border-color: #2ecc71;
+}
+
+.variant-card--completed .variant-card__section--pending {
+    background: #d5f5e3;
+    border-color: #2ecc71;
+    color: #1e8449;
+}
+
+.variant-card--completed .variant-card__section--pending:hover {
+    background: #c1f0d1;
+}
+
+.variant-card--completed .variant-card__arrow {
+    color: #1e8449;
+}
+
+.variant-card--completed .variant-card__status {
+    background: #eafaf1;
+    border-color: #2ecc71;
+    color: #1e8449;
+}
+
+.variant-card--completed .variant-card__photo {
+    border-color: #2ecc71;
+}
+
+.variant-card--completed .variant-card__photo-btn {
+    color: #2ecc71;
+}

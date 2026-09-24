@@ -1,0 +1,181 @@
+import { useEffect, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import BottomBar from '../components/BottomBar'
+import { productsApi } from '../api'
+import './Stage7.css'
+
+const documentFields = [
+    ['warranty', 'Гарантийный талон'],
+    ['brand', 'Бренд'],
+    ['certificate', 'Сертификат соответствия'],
+    ['declaration', 'Декларация о соответствии'],
+    ['stateRegistration', 'Свидетельство о государственной регистрации'],
+    ['registration', 'Регистрационное удостоверение'],
+    ['manual', 'Руководство по эксплуатации'],
+    ['other', 'Иной документ'],
+]
+
+function valueText(values, code) {
+    const field = (values || []).find((item) => item.code === code && !item.variationId)
+    if (!field?.value) return ''
+    return field.value === 'other' ? (field.customValue || '') : field.value
+}
+
+function getRequiredFields(categoryCode, hasBrand) {
+    const required = new Set(['warranty', 'manual'])
+    if (categoryCode === 'handpieces') required.add('registration')
+    if (categoryCode === 'aerosols') {
+        required.add('certificate')
+        required.add('declaration')
+    }
+    if (hasBrand) required.add('brand')
+    return required
+}
+
+function Stage7() {
+    const [params] = useSearchParams()
+    const productId = params.get('id')
+    const [files, setFiles] = useState({})
+    const [requiredFields, setRequiredFields] = useState(new Set(['warranty', 'manual']))
+    const [error, setError] = useState('')
+    const fileInputsRef = useRef({})
+
+    const load = async () => {
+        const product = await productsApi.get(productId)
+        const next = {}
+        for (const file of product.files || []) {
+            if (file.role === 'document' && file.documentType && !file.variationId) next[file.documentType] = file
+        }
+        const hasBrand = Boolean(valueText(product.values, 'brand') || product.brandName?.trim())
+        setRequiredFields(getRequiredFields(product.categoryCode || '', hasBrand))
+        setFiles(next)
+    }
+
+    useEffect(() => {
+        if (!productId) return
+        load().catch((loadError) => setError(loadError.message))
+    }, [productId])
+
+    const handleFileChange = async (name, event) => {
+        const file = event.target.files?.[0]
+        event.target.value = ''
+        if (!file || !productId) return
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('role', 'document')
+        formData.append('documentType', name)
+        setError('')
+        try {
+            await productsApi.upload(productId, formData)
+            await load()
+        } catch (uploadError) {
+            setError(uploadError.message)
+        }
+    }
+
+    const handleFileRemove = async (name) => {
+        const file = files[name]
+        if (!file) return
+        setError('')
+        try {
+            await productsApi.deleteFile(file.id)
+            await load()
+        } catch (removeError) {
+            setError(removeError.message)
+        }
+    }
+
+    const uploadedFiles = documentFields
+        .map(([name, label]) => ({ name, label, file: files[name] }))
+        .filter((item) => item.file)
+
+    return (
+        <>
+            <div className="container stage7-page">
+                <h2 className="subtitle">Этап 7 - Добавьте документы</h2>
+                {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
+                {error && <p className="form-error">{error}</p>}
+
+                <div className="form">
+                    {documentFields.map(([name, label]) => (
+                        <div className="field" key={name}>
+                            <label className="label">{label}</label>
+                            <input
+                                type="file"
+                                ref={(element) => { fileInputsRef.current[name] = element }}
+                                onChange={(event) => handleFileChange(name, event)}
+                                style={{ display: 'none' }}
+                            />
+                            <div className={`field-control${name === 'warranty' ? ' field-control--warranty' : ''}`}>
+                                <div className="file-input">
+                                    <input
+                                        type="text"
+                                        className="file-input__text"
+                                        value={files[name] ? files[name].name : ''}
+                                        placeholder={label}
+                                        readOnly
+                                    />
+                                    {files[name] && (
+                                        <button
+                                            type="button"
+                                            className="file-input__clear"
+                                            onClick={() => handleFileRemove(name)}
+                                            title="Удалить файл"
+                                        >
+                                            ✕
+                                        </button>
+                                    )}
+                                    <button
+                                        type="button"
+                                        className="file-input__clip"
+                                        onClick={() => fileInputsRef.current[name]?.click()}
+                                        title="Прикрепить файл"
+                                    >
+                                        📎
+                                    </button>
+                                </div>
+                                {requiredFields.has(name) && <span className="required-mark">✱</span>}
+                                {name === 'warranty' && (
+                                    <button type="button" className="template-btn">
+                                        Шаблон
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {uploadedFiles.length > 0 && (
+                    <div className="uploaded-docs">
+                        <h3 className="uploaded-docs__title">Загруженные документы</h3>
+                        <div className="uploaded-docs__list">
+                            {uploadedFiles.map(({ name, label, file }) => (
+                                <div className="file-card-row" key={name}>
+                                    <div className="file-card">
+                                        <span className="file-card__icon">📄</span>
+                                        <span className="file-card__name">{label}</span>
+                                        <button
+                                            type="button"
+                                            className="file-card__remove"
+                                            onClick={() => handleFileRemove(name)}
+                                            title="Удалить"
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
+                                    <a className="file-card__download" href={file.url} download={file.name}>
+                                        Скачать
+                                    </a>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <BottomBar current={7} total={21} prevPath="/stage6" nextPath="/stage8" />
+        </>
+    )
+}
+
+export default Stage7

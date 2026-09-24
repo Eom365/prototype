@@ -1,0 +1,240 @@
+.stage17-page.container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px 100px;
+    overflow: visible;
+}
+
+.stage17-page .subtitle {
+    text-align: left;
+    font-weight: bold;
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.stage17-page .form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stage17-page .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+}
+
+.stage17-page .field-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stage17-page .field-control .file-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.stage17-page .field-control--warranty {
+    position: relative;
+}
+
+.stage17-page .field-control--warranty .template-btn {
+    position: absolute;
+    left: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.stage17-page .required-mark {
+    font-size: 22px;
+    color: #000;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.stage17-page .template-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-family: inherit;
+}
+
+.stage17-page .template-btn:hover {
+    background: #f5f5f5;
+}
+
+.stage17-page .label {
+    font-weight: 500;
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.stage17-page .file-input {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 2px 4px 2px 10px;
+    background: #fff;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.stage17-page .file-input:focus-within {
+    border-color: #2ecc71;
+}
+
+.stage17-page .file-input__text {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 10px 0;
+    background: transparent;
+    color: #333;
+    min-width: 0;
+}
+
+.stage17-page .file-input__text::placeholder {
+    color: #999;
+}
+
+.stage17-page .file-input__clear {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: #eee;
+    color: #666;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.stage17-page .file-input__clear:hover {
+    background: #ddd;
+    color: #000;
+}
+
+.stage17-page .file-input__clip {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    flex-shrink: 0;
+    color: #666;
+    transition: background 0.2s;
+}
+
+.stage17-page .file-input__clip:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.stage17-page .uploaded-docs {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+}
+
+.stage17-page .uploaded-docs__title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.stage17-page .uploaded-docs__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stage17-page .file-card-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stage17-page .file-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.stage17-page .file-card__icon {
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.stage17-page .file-card__name {
+    flex: 1;
+    font-size: 15px;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.stage17-page .file-card__remove {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1.5px solid #e74c3c;
+    background: #fdecea;
+    color: #e74c3c;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.stage17-page .file-card__remove:hover {
+    background: #fadbd8;
+}
+
+.stage17-page .file-card__download {
+    color: #2c3ecc;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.stage17-page .file-card__download:hover {
+    text-decoration: underline;
+}

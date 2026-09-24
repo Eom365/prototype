@@ -1,0 +1,157 @@
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px 100px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    font-weight: normal;
+    color: #666;
+    margin-top: -15px;
+    margin-bottom: 30px;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.slot--big {
+    aspect-ratio: 1 / 1;
+    border: 2px solid #2ecc71;
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.slots-small {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.slot--small {
+    aspect-ratio: 1 / 1;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.slot__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.add-photo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 20px 8px 8px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #333;
+    transition: background 0.2s, border-color 0.2s;
+    margin-bottom: 24px;
+    font-family: inherit;
+}
+
+.add-photo-btn:hover:not(:disabled) {
+    background: #fafafa;
+    border-color: #bbb;
+}
+
+.add-photo-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.add-photo-btn__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f5e6dc;
+    color: #5b2c0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: bold;
+    flex-shrink: 0;
+    border: 1px solid #e0cdbf;
+}
+
+.add-photo-btn__text {
+    white-space: nowrap;
+}
+
+/* ===== Видео ===== */
+.subtitle--video {
+    margin-top: 40px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.video-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.add-video-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 20px 8px 8px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #333;
+    transition: background 0.2s, border-color 0.2s;
+    font-family: inherit;
+}
+
+.add-video-btn:hover {
+    background: #fafafa;
+    border-color: #bbb;
+}
+
+.add-video-btn__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f5e6dc;
+    color: #5b2c0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: bold;
+    flex-shrink: 0;
+    border: 1px solid #e0cdbf;
+}
+
+.add-video-btn__text {
+    white-space: nowrap;
+}
+
+.no-sub-text {
+    font-size: 15px;
+    color: #c0392b;
+    font-weight: 500;
+}
