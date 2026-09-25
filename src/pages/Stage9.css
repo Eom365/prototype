@@ -1,5 +1,5 @@
 .stage9-page.container {
-    max-width: 700px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 40px 20px 100px;
     overflow: visible;
@@ -122,9 +122,17 @@
 .loyalty-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     margin-bottom: 14px;
-    flex-wrap: wrap;
+}
+
+.loyalty-row__content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+    flex-wrap: nowrap;
 }
 
 .loyalty-text {
@@ -155,16 +163,37 @@
 }
 
 .loyalty-input--price {
-    width: 60px;
+    width: 72px;
     padding: 3px 6px;
     font-size: 13px;
+    flex-shrink: 0;
+}
+
+.loyalty-input--small,
+.loyalty-currency,
+.loyalty-text,
+.stage9-page .loyalty-row .info-icon,
+.stage9-page .loyalty-row .required-mark {
+    flex-shrink: 0;
+}
+
+.stage9-page .loyalty-row .info-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid #999;
+    color: #999;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: help;
 }
 
 .loyalty-currency {
     font-size: 16px;
     font-weight: bold;
     color: #c0392b;
-    margin-left: 6px;
 }
 
 .loyalty-help {
@@ -234,15 +263,7 @@
     transform: translateX(26px);
 }
 
-.stage9-page .loyalty-row--first {
-    position: relative;
-}
-
-.stage9-page .loyalty-row--first .required-mark {
-    position: absolute;
-    left: calc(100% + 4px);
-    top: 50%;
-    transform: translateY(-50%);
+.stage9-page .loyalty-row .required-mark {
     font-size: 22px;
     color: #000;
     line-height: 1;

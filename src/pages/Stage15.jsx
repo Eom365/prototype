@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import BottomBar from '../components/BottomBar'
 import CustomCharacteristicsBlock from '../components/CustomCharacteristicsBlock'
+import DimensionsGroup from '../components/DimensionsGroup'
 import VariationPreview from '../components/VariationPreview'
 import { catalogApi, productsApi } from '../api'
 import { useCardIds, variationSpecsFrom } from '../cardScope'
 import { customRowsFromValues, normalizeCustomRows, serializeCustomRows } from '../customCharacteristics'
 import { emptyDescriptionForm, parseDescriptionForm, serializeDescriptionForm } from '../descriptionForm'
+import { DIMENSION_CODES } from '../productSpecs'
 import Stage5Description from './Stage5Description'
 import './Stage5.css'
 
@@ -60,7 +62,11 @@ function Stage15() {
             setCustomRows(normalizeCustomRows(
                 customRowsFromValues(variation.values, { variationId }, catalog.unitGroups)
             ))
-            setLogo((product.files || []).find((file) => file.role === 'logo' && file.variationId === variationId) || null)
+            setLogo(
+                (product.files || []).find((file) => file.role === 'logo' && file.variationId === variationId)
+                || (product.files || []).find((file) => file.role === 'logo' && !file.variationId)
+                || null,
+            )
             setLoaded(true)
         }).catch((loadError) => setError(loadError.message))
     }, [productId, variationId, catalog])
@@ -164,6 +170,14 @@ function Stage15() {
                     {groups.map((group) => (
                         <div key={group.name}>
                             <h3 className="subtitle subtitle--spaced">{group.name}</h3>
+                            {group.name === 'Габариты' && (
+                                <DimensionsGroup
+                                    fields={group.fields}
+                                    specs={specs}
+                                    unitOptions={catalog?.unitGroups?.dimension || []}
+                                    onChange={updateSpec}
+                                />
+                            )}
                             {group.name === 'Производитель' && (
                                 <div className="field-row">
                                     <span className="info-icon" title="Подсказка">ⓘ</span>
@@ -184,7 +198,10 @@ function Stage15() {
                                     )}
                                 </div>
                             )}
-                            {group.fields.filter((field) => !(field.code === 'lightSource' && specs.light?.value === 'no')).map((field) => (
+                            {group.fields
+                                .filter((field) => !(field.code === 'lightSource' && specs.light?.value === 'no'))
+                                .filter((field) => group.name !== 'Габариты' || !DIMENSION_CODES.includes(field.code))
+                                .map((field) => (
                                 <CharacteristicRow
                                     key={field.code}
                                     field={field}

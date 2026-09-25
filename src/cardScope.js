@@ -43,6 +43,10 @@ export function variationSpecsFrom(product, variation, characteristics, defaultU
             value = saved.value || ''
             customValue = saved.customValue || ''
             unit = saved.unit || defaultUnit
+        } else if (base) {
+            value = base.value || ''
+            customValue = base.customValue || ''
+            unit = base.unit || defaultUnit
         }
 
         next[field.code] = { value, customValue, unit }

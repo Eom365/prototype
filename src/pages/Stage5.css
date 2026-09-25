@@ -194,6 +194,63 @@
     width: 100%;
 }
 
+.product-line-row {
+    grid-template-columns: 24px minmax(180px, 240px) minmax(180px, 1fr);
+}
+
+.product-line-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.product-line-control .field-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.hint-icon--inline {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid #999;
+    color: #666;
+    font-size: 26px;
+    font-weight: 600;
+    cursor: help;
+    flex-shrink: 0;
+}
+
+.hint-icon--inline::after {
+    content: attr(data-hint);
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 8px);
+    display: none;
+    width: max-content;
+    max-width: 320px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: #333;
+    color: #fff;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 1.4;
+    white-space: pre-line;
+    text-align: left;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.hint-icon--inline:hover::after {
+    display: block;
+}
+
 @media (max-width: 768px) {
     .desc-subsection__row,
     .desc-subsection__row--conditions {

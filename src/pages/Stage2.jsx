@@ -10,14 +10,6 @@ import {
 } from '../handpieceKinds'
 import './Stage2.css'
 
-const PRODUCT_LINE_HINT = `Пример 1: Смартфон iPhone 15 Pro Max.
-Модели продукта: 15, 15 Pro, 15 Pro Max.
-Линейка продукта: iPhone.
-
-Пример 2: Ноутбук MateBook X Pro.
-Модели продукта: D, X, X Pro.
-Линейка продукта: MateBook.`
-
 function getPurposeRoot(purpose) {
     return purpose === 'Стоматология' ? 'Профессиональная стоматология' : 'Стоматология'
 }
@@ -141,7 +133,6 @@ function Stage2() {
         setKindCode('')
         setProductName('')
         setCategoryPath('')
-        setProductLine('')
     }
 
     const save = () => {
@@ -291,18 +282,6 @@ function Stage2() {
                     </div>
                 </div>
 
-                <div className="field">
-                    <p className="paragraph">Укажите линейку продукции:</p>
-                    <div className="field-control-with-hint">
-                        <input
-                            type="text"
-                            className="input"
-                            value={productLine}
-                            onChange={(event) => setProductLine(event.target.value)}
-                        />
-                        <span className="hint-icon" data-hint={PRODUCT_LINE_HINT}>?</span>
-                    </div>
-                </div>
             </div>
 
             <BottomBar current={2} total={21} prevPath="/stage1" nextPath="/stage3" onSave={save} />

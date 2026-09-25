@@ -131,7 +131,6 @@ function Stage9() {
 
                     {discounts.map((discount, index) => (
                         <div className={`loyalty-row${index === 0 ? ' loyalty-row--first' : ''}`} key={index}>
-                            {/* Переключатель */}
                             <button
                                 type="button"
                                 className={`toggle ${discount.enabled ? 'toggle--on' : ''}`}
@@ -141,42 +140,36 @@ function Stage9() {
                                 <span className="toggle__knob" />
                             </button>
 
-                            <span className="loyalty-text">
-                                Стоимость продукта при покупке от
-                            </span>
-
-                            <input
-                                type="text"
-                                className="loyalty-input loyalty-input--small"
-                                value={discount.from}
-                                onChange={(e) => handleDiscountChange(index, 'from', e.target.value)}
-                                disabled={!discount.enabled}
-                            />
-
-                            <span className="loyalty-text">до</span>
-
-                            <input
-                                type="text"
-                                className="loyalty-input loyalty-input--small"
-                                value={discount.to}
-                                onChange={(e) => handleDiscountChange(index, 'to', e.target.value)}
-                                disabled={!discount.enabled}
-                            />
-
-                            <span className="loyalty-text">штук</span>
-
-                            <span className="loyalty-currency">{currencySymbols[currency]}</span>
-
-                            <input
-                                type="text"
-                                className="loyalty-input loyalty-input--price"
-                                value={discount.value}
-                                onChange={(e) => handleDiscountChange(index, 'value', e.target.value)}
-                                disabled={!discount.enabled}
-                            />
-
-                            <span className="info-icon" title="Подсказка">ⓘ</span>
-                            {index === 0 && <span className="required-mark">✱</span>}
+                            <div className="loyalty-row__content">
+                                <span className="loyalty-text">Стоимость единицы продукта</span>
+                                <span className="loyalty-currency">{currencySymbols[currency]}</span>
+                                <input
+                                    type="text"
+                                    className="loyalty-input loyalty-input--price"
+                                    value={discount.value}
+                                    onChange={(e) => handleDiscountChange(index, 'value', e.target.value)}
+                                    disabled={!discount.enabled}
+                                />
+                                <span className="loyalty-text">при покупке от</span>
+                                <input
+                                    type="text"
+                                    className="loyalty-input loyalty-input--small"
+                                    value={discount.from}
+                                    onChange={(e) => handleDiscountChange(index, 'from', e.target.value)}
+                                    disabled={!discount.enabled}
+                                />
+                                <span className="loyalty-text">до</span>
+                                <input
+                                    type="text"
+                                    className="loyalty-input loyalty-input--small"
+                                    value={discount.to}
+                                    onChange={(e) => handleDiscountChange(index, 'to', e.target.value)}
+                                    disabled={!discount.enabled}
+                                />
+                                <span className="loyalty-text">товаров.</span>
+                                <span className="info-icon" title="Подсказка">ⓘ</span>
+                                {index === 0 && <span className="required-mark">✱</span>}
+                            </div>
                         </div>
                     ))}
                 </div>

@@ -2,14 +2,24 @@ import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import BottomBar from '../components/BottomBar'
 import CustomCharacteristicsBlock from '../components/CustomCharacteristicsBlock'
+import DimensionsGroup from '../components/DimensionsGroup'
 import { catalogApi, productsApi } from '../api'
 import { customRowsFromValues, normalizeCustomRows, serializeCustomRows } from '../customCharacteristics'
 import { emptyDescriptionForm, parseDescriptionForm, serializeDescriptionForm } from '../descriptionForm'
+import { DIMENSION_CODES, prefillSpecFromProduct } from '../productSpecs'
 import ImageHint from '../components/ImageHint'
 import Stage5Description from './Stage5Description'
 import './Stage5.css'
 
 const DIMENSIONS_HINT_IMAGE = '/images/dimensions.png'
+
+const PRODUCT_LINE_HINT = `Пример 1: Смартфон iPhone 15 Pro Max.
+Модели продукта: 15, 15 Pro, 15 Pro Max.
+Линейка продукта: iPhone.
+
+Пример 2: Ноутбук MateBook X Pro.
+Модели продукта: D, X, X Pro.
+Линейка продукта: MateBook.`
 
 const defaultUnits = {
     weight: 'gram',
@@ -35,6 +45,8 @@ function Stage5() {
     const [descriptionForm, setDescriptionForm] = useState(emptyDescriptionForm)
     const [specs, setSpecs] = useState({})
     const [customRows, setCustomRows] = useState(() => normalizeCustomRows([]))
+    const [productLine, setProductLine] = useState('')
+    const [categorySnapshot, setCategorySnapshot] = useState(null)
     const [logo, setLogo] = useState(null)
     const [error, setError] = useState('')
     const [loaded, setLoaded] = useState(false)
@@ -49,6 +61,13 @@ function Stage5() {
         productsApi.get(productId).then((product) => {
             setKindCode(product.kindCode || '')
             setKindName(product.kindName || '')
+            setProductLine(product.productLine || '')
+            setCategorySnapshot({
+                purpose: product.purpose || '',
+                kindCode: product.kindCode || '',
+                productName: product.productName || '',
+                categoryPath: product.categoryPath || '',
+            })
             setDescriptionForm(parseDescriptionForm(product))
             setLogo((product.files || []).find((file) => file.role === 'logo' && !file.variationId) || null)
 
@@ -56,11 +75,8 @@ function Stage5() {
             const next = {}
             for (const field of kind?.characteristics || []) {
                 const saved = (product.values || []).find((value) => value.code === field.code)
-                next[field.code] = {
-                    value: saved?.value || '',
-                    customValue: saved?.customValue || '',
-                    unit: saved?.unit || (field.unitGroup ? defaultUnits[field.unitGroup] : ''),
-                }
+                const defaultUnit = field.unitGroup ? defaultUnits[field.unitGroup] : ''
+                next[field.code] = prefillSpecFromProduct(field.code, saved, product, defaultUnit)
             }
             setSpecs(next)
             setCustomRows(normalizeCustomRows(customRowsFromValues(product.values, {}, catalog.unitGroups)))
@@ -123,6 +139,12 @@ function Stage5() {
         if (!productId) throw new Error('Сначала создайте карточку на главной странице')
         if (!loaded) throw new Error('Карточка ещё загружается, подождите секунду')
         await productsApi.saveDescription(productId, serializeDescriptionForm(descriptionForm))
+        if (categorySnapshot) {
+            await productsApi.saveCategory(productId, {
+                ...categorySnapshot,
+                productLine,
+            })
+        }
         const values = [
             ...Object.entries(specs).map(([code, value]) => ({
                 code,
@@ -185,10 +207,37 @@ function Stage5() {
                                 )}
                             </h3>
 
+                            {group.name === 'Габариты' && (
+                                <DimensionsGroup
+                                    fields={group.fields}
+                                    specs={specs}
+                                    unitOptions={catalog?.unitGroups?.dimension || []}
+                                    onChange={updateSpec}
+                                />
+                            )}
+
                             {group.fields
                                 .filter((field) => !(field.code === 'lightSource' && specs.light?.value === 'no'))
+                                .filter((field) => group.name !== 'Габариты' || !DIMENSION_CODES.includes(field.code))
                                 .map((field) => (
                                     <div key={field.code}>
+                                        {group.name === 'Основные' && field.code === 'model' && (
+                                            <div className="field-row product-line-row">
+                                                <span className="info-icon" title="Подсказка">ⓘ</span>
+                                                <span className="field-name">Линейка продукции</span>
+                                                <div className="product-line-control">
+                                                    <input
+                                                        type="text"
+                                                        className="field-input"
+                                                        placeholder="Линейка продукции"
+                                                        value={productLine}
+                                                        onChange={(event) => setProductLine(event.target.value)}
+                                                    />
+                                                    <span className="hint-icon hint-icon--inline" data-hint={PRODUCT_LINE_HINT}>?</span>
+                                                </div>
+                                            </div>
+                                        )}
+
                                         {group.name === 'Производитель' && field.code === 'brand' && (
                                             <p className="field-description">
                                                 Бренд - это название товарного знака, под которым продается товар.

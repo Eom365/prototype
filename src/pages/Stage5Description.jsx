@@ -63,11 +63,11 @@ function ConditionGroup({ title, values, onChange }) {
                     unit="%"
                 />
                 <div className="desc-range-group desc-range-group--single">
-                    <span className="desc-range-group__title">Освещение</span>
+                    <span className="desc-range-group__title">Попадание прямых солнечных лучей</span>
                     <DescriptionInput
                         value={values.lighting}
                         onChange={(value) => patch('lighting', value)}
-                        placeholder="Освещение"
+                        placeholder="Попадание прямых солнечных лучей"
                     />
                 </div>
             </div>
