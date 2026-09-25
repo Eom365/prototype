@@ -37,6 +37,17 @@
     border-radius: 6px;
 }
 
+.pack-hint-popup--large {
+    left: 0;
+    top: calc(100% + 8px);
+    transform: none;
+}
+
+.pack-hint-popup--large img {
+    width: 550px;
+    max-width: min(550px, 92vw);
+}
+
 .pack-hint-icon:hover .pack-hint-popup,
 .pack-hint-icon:focus-within .pack-hint-popup {
     display: block;

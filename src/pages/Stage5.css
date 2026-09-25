@@ -180,7 +180,18 @@
 
 .field-description {
     text-align: left;
-    margin: 36px;
+    margin: 12px 0 20px;
+    width: 100%;
+    max-width: none;
+}
+
+.group-title {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    text-align: left;
+    width: 100%;
 }
 
 @media (max-width: 768px) {

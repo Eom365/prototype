@@ -4,6 +4,12 @@ import BottomBar from '../components/BottomBar'
 import { productsApi } from '../api'
 import './Stage1.css'
 
+const BRAND_DESCRIPTION = `Бренд - это название товарного знака, под которым продается товар.
+Кто может заполнять:
+Только правообладатель товарного знака. Для подтверждения потребуется загрузить "Свидетельство на товарный знак" на Этапе 7 "Документы на продукт".
+Если вы продаете оригинальный товар, но не являетесь правообладателем - не заполняйте это поле.
+Пример правильного заполнения: "ОМ 365"`
+
 const emptyFields = {
     authorLastName: '',
     authorFirstName: '',
@@ -115,6 +121,7 @@ function Stage1() {
                     <div className="field">
                         <label className="label">Фирменное наименование продукта</label>
                         <div className="field-control">
+                            <span className="required-mark">✱</span>
                             <input
                                 type="text"
                                 value={fields.tradeName}
@@ -122,12 +129,12 @@ function Stage1() {
                                 className="input"
                                 placeholder="Введите значение..."
                             />
-                            <span className="required-mark">✱</span>
                         </div>
                     </div>
 
                     <div className="field">
                         <label className="label">Наименование бренда</label>
+                        <p className="field-description">{BRAND_DESCRIPTION}</p>
                         <input
                             type="text"
                             value={fields.brandName}
@@ -140,6 +147,7 @@ function Stage1() {
                     <div className="field">
                         <label className="label">Производитель товара</label>
                         <div className="field-control">
+                            <span className="required-mark">✱</span>
                             <input
                                 type="text"
                                 value={fields.manufacturerName}
@@ -147,13 +155,13 @@ function Stage1() {
                                 className="input"
                                 placeholder="Введите значение..."
                             />
-                            <span className="required-mark">✱</span>
                         </div>
                     </div>
 
                     <div className="field">
                         <label className="label">Страна производителя</label>
                         <div className="field-control">
+                            <span className="required-mark">✱</span>
                             <input
                                 type="text"
                                 value={fields.manufacturerCountry}
@@ -161,7 +169,6 @@ function Stage1() {
                                 className="input"
                                 placeholder="Введите значение..."
                             />
-                            <span className="required-mark">✱</span>
                         </div>
                     </div>
 

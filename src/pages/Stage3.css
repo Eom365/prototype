@@ -17,7 +17,16 @@
     font-weight: normal;
     color: #666;
     margin-top: -15px;
-    margin-bottom: 30px;
+    margin-bottom: 12px;
+}
+
+.section-description {
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.55;
+    color: #444;
+    margin: 0 0 30px;
+    max-width: none;
 }
 
 .gallery {

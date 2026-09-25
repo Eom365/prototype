@@ -1,5 +1,5 @@
 .stage1-page.container {
-    max-width: 600px;
+    max-width: 720px;
     margin: 0 auto;
     padding: 40px 20px 100px;
     text-align: left;
@@ -64,6 +64,18 @@
     font-size: 22px;
     color: #000;
     flex-shrink: 0;
+    line-height: 1;
+}
+
+.field-description {
+    text-align: left;
+    margin: 4px 0 8px;
+    width: 100%;
+    max-width: none;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #444;
+    white-space: pre-line;
 }
 
 .input {

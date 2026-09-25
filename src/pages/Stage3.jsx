@@ -14,6 +14,11 @@ function Stage3() {
             <div className="container">
                 <h1 className="title">Этап 3 - Презентационный каталог продукции</h1>
                 <h2 className="subtitle">Презентационные фотографии продукта</h2>
+                <p className="section-description">
+                    Презентационные фотографии продукта — это общий блок карточки товара, где продукт показан
+                    полным ассортиментом, чтобы зацепить покупателя и подтолкнуть его к выбору конкретного
+                    продукта и покупке.
+                </p>
 
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
                 {productId && <PhotoGallery productId={productId} role="presentation" />}

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using ProductCard.Api.Models;
 
 namespace ProductCard.Api.Data;
@@ -19,6 +20,7 @@ public static class CatalogSeed
         if (db.ProductKinds.Any())
         {
             EnsureAerosolFields(db);
+            EnsureHandpieceSubtypes(db);
             return;
         }
 
@@ -40,9 +42,12 @@ public static class CatalogSeed
 
         var kinds = new Dictionary<string, ProductKind>
         {
-            ["contra_angle"] = Kind(handpieces, "contra_angle", "Угловой наконечник", 1),
-            ["straight"] = Kind(handpieces, "straight", "Прямой наконечник", 2),
-            ["turbine"] = Kind(handpieces, "turbine", "Турбинный наконечник", 3),
+            ["contra_angle_increasing"] = Kind(handpieces, "contra_angle_increasing", "Повышающий", 1),
+            ["contra_angle_decreasing"] = Kind(handpieces, "contra_angle_decreasing", "Понижающий", 2),
+            ["contra_angle_1_1"] = Kind(handpieces, "contra_angle_1_1", "1:1", 3),
+            ["straight_increasing"] = Kind(handpieces, "straight_increasing", "Повышающий", 4),
+            ["straight_1_1"] = Kind(handpieces, "straight_1_1", "1:1", 5),
+            ["turbine"] = Kind(handpieces, "turbine", "Турбинный наконечник", 6),
             ["lubricant"] = Kind(aerosols, "lubricant", "Масло для смазки", 1),
             ["cleaner"] = Kind(aerosols, "cleaner", "Очиститель", 2)
         };
@@ -53,8 +58,11 @@ public static class CatalogSeed
         db.SaveChanges();
 
         var links = new List<ProductKindCharacteristic>();
-        foreach (var code in new[] { "contra_angle", "straight" })
-            links.AddRange(Links(kinds[code], definitions, ContraFields()));
+        links.AddRange(Links(kinds["contra_angle_increasing"], definitions, ContraIncreasingFields()));
+        links.AddRange(Links(kinds["contra_angle_decreasing"], definitions, ContraDecreasingFields()));
+        links.AddRange(Links(kinds["contra_angle_1_1"], definitions, Contra11Fields()));
+        links.AddRange(Links(kinds["straight_increasing"], definitions, StraightIncreasingFields()));
+        links.AddRange(Links(kinds["straight_1_1"], definitions, Straight11Fields()));
         links.AddRange(Links(kinds["turbine"], definitions, TurbineFields()));
         links.AddRange(Links(kinds["lubricant"], definitions, AerosolFields()));
         links.AddRange(Links(kinds["cleaner"], definitions, AerosolFields()));
@@ -277,10 +285,9 @@ public static class CatalogSeed
         Text("country")
     ];
 
-    private static FieldSpec[] ContraFields() =>
+    private static FieldSpec[] ContraBodyFields() =>
     [
         ..CommonFields(),
-        Choice("gearRatio", true, ("1:1", "1:1"), ("1:5", "1:5"), ("20:1", "20:1")),
         Choice("maxSpeed", true, ("40000", "40 000"), ("200000", "200 000"), ("10000", "10 000")),
         Choice("light", false, ("yes", "Есть"), ("no", "Нет")),
         Choice("lightSource", false, ("fiber", "Световод"), ("led", "Светодиод")),
@@ -300,6 +307,47 @@ public static class CatalogSeed
             ("titanium", "Титан")),
         Choice("bodyCoating", true, ("chrome", "Хром")),
         Choice("warranty", true, ("6", "6 месяцев"), ("12", "12 месяцев"))
+    ];
+
+    private static FieldSpec[] ContraIncreasingFields() =>
+    [
+        ..ContraBodyFields(),
+        Choice("gearRatio", true,
+            ("1:2", "1:2"),
+            ("1:4", "1:4"),
+            ("1:4.5", "1:4,5"),
+            ("1:5", "1:5"),
+            ("1:10", "1:10"))
+    ];
+
+    private static FieldSpec[] ContraDecreasingFields() =>
+    [
+        ..ContraBodyFields(),
+        Choice("gearRatio", true,
+            ("4:1", "4:1"),
+            ("5:1", "5:1"),
+            ("6:1", "6:1"),
+            ("10:1", "10:1"),
+            ("16:1", "16:1"),
+            ("20:1", "20:1"))
+    ];
+
+    private static FieldSpec[] Contra11Fields() =>
+    [
+        ..ContraBodyFields(),
+        Choice("gearRatio", true, ("1:1", "1:1"))
+    ];
+
+    private static FieldSpec[] StraightIncreasingFields() =>
+    [
+        ..ContraBodyFields(),
+        Choice("gearRatio", true, ("1:2", "1:2"))
+    ];
+
+    private static FieldSpec[] Straight11Fields() =>
+    [
+        ..ContraBodyFields(),
+        Choice("gearRatio", true, ("1:1", "1:1"))
     ];
 
     private static FieldSpec[] TurbineFields() =>
@@ -329,6 +377,171 @@ public static class CatalogSeed
         Choice("bodyCoating", true, ("chrome", "Хром")),
         Choice("warranty", true, ("6", "6 месяцев"), ("12", "12 месяцев"))
     ];
+
+    private static void EnsureHandpieceSubtypes(AppDbContext db)
+    {
+        var handpieces = db.ProductCategories.FirstOrDefault(item => item.Code == "handpieces");
+        if (handpieces == null)
+            return;
+
+        var definitions = db.CharacteristicDefinitions.ToDictionary(item => item.Code);
+        if (!definitions.ContainsKey("gearRatio"))
+            return;
+
+        (string Code, string Name, int Sort, FieldSpec[] Fields)[] subtypes =
+        [
+            ("contra_angle_increasing", "Повышающий", 1, ContraIncreasingFields()),
+            ("contra_angle_decreasing", "Понижающий", 2, ContraDecreasingFields()),
+            ("contra_angle_1_1", "1:1", 3, Contra11Fields()),
+            ("straight_increasing", "Повышающий", 4, StraightIncreasingFields()),
+            ("straight_1_1", "1:1", 5, Straight11Fields())
+        ];
+
+        foreach (var subtype in subtypes)
+        {
+            var kind = db.ProductKinds.FirstOrDefault(item => item.Code == subtype.Code);
+            if (kind == null)
+            {
+                kind = Kind(handpieces, subtype.Code, subtype.Name, subtype.Sort);
+                db.ProductKinds.Add(kind);
+                db.SaveChanges();
+            }
+            else if (kind.SortOrder != subtype.Sort)
+            {
+                kind.SortOrder = subtype.Sort;
+            }
+
+            EnsureKindCharacteristics(db, kind, definitions, subtype.Fields);
+        }
+
+        MigrateHandpieceProducts(db);
+        db.SaveChanges();
+        RemoveLegacyHandpieceKinds(db);
+        db.SaveChanges();
+    }
+
+    private static void EnsureKindCharacteristics(
+        AppDbContext db,
+        ProductKind kind,
+        Dictionary<string, CharacteristicDefinition> definitions,
+        FieldSpec[] specs)
+    {
+        var hasLinks = db.ProductKindCharacteristics.Any(item => item.ProductKindId == kind.Id);
+        if (!hasLinks)
+        {
+            db.ProductKindCharacteristics.AddRange(Links(kind, definitions, specs));
+            return;
+        }
+
+        var gearSpec = specs.FirstOrDefault(item => item.Code == "gearRatio");
+        if (gearSpec == null || !definitions.TryGetValue("gearRatio", out var gearDefinition))
+            return;
+
+        var gearLink = db.ProductKindCharacteristics
+            .FirstOrDefault(item =>
+                item.ProductKindId == kind.Id &&
+                item.CharacteristicDefinitionId == gearDefinition.Id);
+        if (gearLink == null)
+            return;
+
+        gearLink.InputType = gearSpec.InputType;
+        gearLink.AllowCustom = gearSpec.AllowCustom;
+
+        var oldOptions = db.CharacteristicOptions
+            .Where(item => item.ProductKindCharacteristicId == gearLink.Id)
+            .ToList();
+        if (oldOptions.Count > 0)
+            db.CharacteristicOptions.RemoveRange(oldOptions);
+
+        var optionOrder = 0;
+        foreach (var option in gearSpec.Options)
+        {
+            optionOrder++;
+            db.CharacteristicOptions.Add(new CharacteristicOption
+            {
+                Id = Guid.NewGuid(),
+                ProductKindCharacteristicId = gearLink.Id,
+                Value = option.Value,
+                Label = option.Label,
+                SortOrder = optionOrder
+            });
+        }
+    }
+
+    private static void MigrateHandpieceProducts(AppDbContext db)
+    {
+        var kindsByCode = db.ProductKinds.ToDictionary(item => item.Code);
+        kindsByCode.TryGetValue("contra_angle", out var contraOld);
+        kindsByCode.TryGetValue("straight", out var straightOld);
+        if (contraOld == null && straightOld == null)
+            return;
+
+        var products = db.Products
+            .Include(item => item.Values)
+            .Where(item =>
+                (contraOld != null && item.ProductKindId == contraOld.Id) ||
+                (straightOld != null && item.ProductKindId == straightOld.Id))
+            .ToList();
+
+        foreach (var product in products)
+        {
+            var isContra = contraOld != null && product.ProductKindId == contraOld.Id;
+            var targetCode = isContra
+                ? InferContraSubtype(product)
+                : InferStraightSubtype(product);
+
+            if (kindsByCode.TryGetValue(targetCode, out var targetKind))
+                product.ProductKindId = targetKind.Id;
+        }
+    }
+
+    private static string InferContraSubtype(Product product)
+    {
+        var gear = product.Values.FirstOrDefault(item => item.Code == "gearRatio" && item.VariationId == null)?.Value;
+        if (string.IsNullOrWhiteSpace(gear) || gear == "1:1")
+            return "contra_angle_1_1";
+        if (IsDecreasingRatio(gear))
+            return "contra_angle_decreasing";
+        return "contra_angle_increasing";
+    }
+
+    private static string InferStraightSubtype(Product product)
+    {
+        var gear = product.Values.FirstOrDefault(item => item.Code == "gearRatio" && item.VariationId == null)?.Value;
+        if (gear == "1:2")
+            return "straight_increasing";
+        return "straight_1_1";
+    }
+
+    private static bool IsDecreasingRatio(string gear)
+    {
+        var parts = gear.Split(':');
+        if (parts.Length != 2)
+            return false;
+        if (!int.TryParse(parts[0], out var left) || !int.TryParse(parts[1], out var right))
+            return false;
+        return left > right;
+    }
+
+    private static void RemoveLegacyHandpieceKinds(AppDbContext db)
+    {
+        foreach (var (code, fallbackCode) in new[] { ("contra_angle", "contra_angle_1_1"), ("straight", "straight_1_1") })
+        {
+            var kind = db.ProductKinds.FirstOrDefault(item => item.Code == code);
+            if (kind == null)
+                continue;
+
+            var fallback = db.ProductKinds.FirstOrDefault(item => item.Code == fallbackCode);
+            if (fallback != null)
+            {
+                var products = db.Products.Where(item => item.ProductKindId == kind.Id).ToList();
+                foreach (var product in products)
+                    product.ProductKindId = fallback.Id;
+            }
+
+            db.ProductKinds.Remove(kind);
+        }
+    }
 
     private static IEnumerable<ProductKindCharacteristic> Links(
         ProductKind kind,

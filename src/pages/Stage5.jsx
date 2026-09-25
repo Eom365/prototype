@@ -5,8 +5,11 @@ import CustomCharacteristicsBlock from '../components/CustomCharacteristicsBlock
 import { catalogApi, productsApi } from '../api'
 import { customRowsFromValues, normalizeCustomRows, serializeCustomRows } from '../customCharacteristics'
 import { emptyDescriptionForm, parseDescriptionForm, serializeDescriptionForm } from '../descriptionForm'
+import ImageHint from '../components/ImageHint'
 import Stage5Description from './Stage5Description'
 import './Stage5.css'
+
+const DIMENSIONS_HINT_IMAGE = '/images/dimensions.png'
 
 const defaultUnits = {
     weight: 'gram',
@@ -170,7 +173,17 @@ function Stage5() {
 
                     {groups.map((group) => (
                         <div key={group.name}>
-                            <h3 className="subtitle subtitle--spaced">{group.name}</h3>
+                            <h3 className="subtitle subtitle--spaced group-title">
+                                {group.name}
+                                {group.name === 'Габариты' && (
+                                    <ImageHint
+                                        src={DIMENSIONS_HINT_IMAGE}
+                                        alt="Длина, ширина и высота"
+                                        title="Как измерять габариты"
+                                        size="large"
+                                    />
+                                )}
+                            </h3>
 
                             {group.fields
                                 .filter((field) => !(field.code === 'lightSource' && specs.light?.value === 'no'))

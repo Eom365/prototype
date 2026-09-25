@@ -2,31 +2,38 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import BottomBar from '../components/BottomBar'
 import { catalogApi, productsApi } from '../api'
+import {
+    HANDPIECE_PARENTS,
+    handpieceParentCodeForKind,
+    handpieceParentForKind,
+    handpieceProductName,
+} from '../handpieceKinds'
 import './Stage2.css'
 
-const HANDPIECE_NAMES = {
-    contra_angle: 'Стоматологический угловой наконечник',
-    straight: 'Стоматологический прямой наконечник',
-    turbine: 'Стоматологический турбинный наконечник',
-}
+const PRODUCT_LINE_HINT = `Пример 1: Смартфон iPhone 15 Pro Max.
+Модели продукта: 15, 15 Pro, 15 Pro Max.
+Линейка продукта: iPhone.
 
-const PRODUCT_LINE_HINT = `Пример линейки продукции:
-Линейка смартфонов - iPhone
-Линейка ноутбуков - MateBook
-Линейка стоматологических наконечников - TX`
+Пример 2: Ноутбук MateBook X Pro.
+Модели продукта: D, X, X Pro.
+Линейка продукта: MateBook.`
 
 function getPurposeRoot(purpose) {
     return purpose === 'Стоматология' ? 'Профессиональная стоматология' : 'Стоматология'
 }
 
 function getProductName(kind, categoryCode) {
-    if (categoryCode === 'handpieces' && HANDPIECE_NAMES[kind.code]) {
-        return HANDPIECE_NAMES[kind.code]
+    if (categoryCode === 'handpieces') {
+        return handpieceProductName(kind.code, kind.name)
     }
     return kind.name
 }
 
 function getCategoryPath(kind, categoryName, purpose) {
+    const parent = handpieceParentForKind(kind.code)
+    if (parent) {
+        return `${getPurposeRoot(purpose)} > ${categoryName} > ${parent.name} > ${kind.name}`
+    }
     return `${getPurposeRoot(purpose)} > ${categoryName} > ${kind.name}`
 }
 
@@ -37,6 +44,7 @@ function Stage2() {
     const [purpose, setPurpose] = useState('')
     const [categoryCode, setCategoryCode] = useState('')
     const [kindCode, setKindCode] = useState('')
+    const [handpieceParent, setHandpieceParent] = useState('')
     const [productName, setProductName] = useState('')
     const [categoryPath, setCategoryPath] = useState('')
     const [productLine, setProductLine] = useState('')
@@ -60,18 +68,24 @@ function Stage2() {
     }, [productId])
 
     useEffect(() => {
-        if (!catalog || !kindCode || categoryCode) return
+        if (!catalog || !kindCode || categoryCode || !purpose) return
         for (const category of catalog.categories) {
             if (category.kinds.some((kind) => kind.code === kindCode)) {
                 setCategoryCode(category.code)
                 break
             }
         }
-    }, [catalog, kindCode, categoryCode])
+    }, [catalog, kindCode, categoryCode, purpose])
+
+    useEffect(() => {
+        if (!kindCode) return
+        setHandpieceParent(handpieceParentCodeForKind(kindCode))
+    }, [kindCode])
 
     const selectCategory = (code) => {
-        if (categoryCode === code) return
+        if (!purpose || categoryCode === code) return
         setCategoryCode(code)
+        setHandpieceParent('')
         setKindCode('')
         setProductName('')
         setCategoryPath('')
@@ -85,9 +99,29 @@ function Stage2() {
     }
 
     const selectKind = (kind, code) => {
+        if (!purpose) return
         setCategoryCode(code)
+        setHandpieceParent(handpieceParentCodeForKind(kind.code))
         setKindCode(kind.code)
         applyKindSelection(kind, code)
+    }
+
+    const selectHandpieceParent = (parentCode, category) => {
+        if (!purpose) return
+        setCategoryCode(category.code)
+        setHandpieceParent(parentCode)
+        const parent = HANDPIECE_PARENTS[parentCode]
+        if (parent?.kinds.length === 1) {
+            const kind = category.kinds.find((item) => item.code === parent.kinds[0])
+            if (kind) {
+                setKindCode(kind.code)
+                applyKindSelection(kind, category.code)
+                return
+            }
+        }
+        setKindCode('')
+        setProductName('')
+        setCategoryPath('')
     }
 
     const selectPurpose = (value) => {
@@ -103,6 +137,7 @@ function Stage2() {
 
     const handleClearAll = () => {
         setCategoryCode('')
+        setHandpieceParent('')
         setKindCode('')
         setProductName('')
         setCategoryPath('')
@@ -144,30 +179,74 @@ function Stage2() {
 
                 <p className="paragraph">Выберите тип продукта</p>
                 {catalog?.categories.map((category) => (
-                    <div className="category-block" key={category.code}>
+                    <div
+                        className={`category-block${purpose ? '' : ' category-block--disabled'}`}
+                        key={category.code}
+                    >
                         <label className="radio-label radio-label--category">
                             <input
                                 type="radio"
                                 name="category"
                                 value={category.code}
-                                checked={categoryCode === category.code}
+                                checked={Boolean(purpose) && categoryCode === category.code}
+                                disabled={!purpose}
                                 onChange={() => selectCategory(category.code)}
                             />
                             {category.name}
                         </label>
                         <div className="radio-group radio-group--nested">
-                            {category.kinds.map((kind) => (
-                                <label className="radio-label" key={kind.code}>
-                                    <input
-                                        type="radio"
-                                        name="kind"
-                                        value={kind.code}
-                                        checked={kindCode === kind.code}
-                                        onChange={() => selectKind(kind, category.code)}
-                                    />
-                                    {kind.name}
-                                </label>
-                            ))}
+                            {category.code === 'handpieces' ? (
+                                Object.entries(HANDPIECE_PARENTS).map(([parentCode, parent]) => (
+                                    <div className="subtype-block" key={parentCode}>
+                                        <label className="radio-label subtype-block__title">
+                                            <input
+                                                type="radio"
+                                                name="handpieceParent"
+                                                value={parentCode}
+                                                checked={Boolean(purpose) && handpieceParent === parentCode}
+                                                disabled={!purpose}
+                                                onChange={() => selectHandpieceParent(parentCode, category)}
+                                            />
+                                            {parent.name}
+                                        </label>
+                                        {parent.kinds.length > 1 && (
+                                            <div className="subtype-block__options">
+                                                {parent.kinds.map((code) => {
+                                                    const kind = category.kinds.find((item) => item.code === code)
+                                                    if (!kind) return null
+                                                    return (
+                                                        <label className="radio-label" key={kind.code}>
+                                                            <input
+                                                                type="radio"
+                                                                name="kind"
+                                                                value={kind.code}
+                                                                checked={Boolean(purpose) && kindCode === kind.code}
+                                                                disabled={!purpose}
+                                                                onChange={() => selectKind(kind, category.code)}
+                                                            />
+                                                            {kind.name}
+                                                        </label>
+                                                    )
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))
+                            ) : (
+                                category.kinds.map((kind) => (
+                                    <label className="radio-label" key={kind.code}>
+                                        <input
+                                            type="radio"
+                                            name="kind"
+                                            value={kind.code}
+                                            checked={Boolean(purpose) && kindCode === kind.code}
+                                            disabled={!purpose}
+                                            onChange={() => selectKind(kind, category.code)}
+                                        />
+                                        {kind.name}
+                                    </label>
+                                ))
+                            )}
                         </div>
                     </div>
                 ))}
