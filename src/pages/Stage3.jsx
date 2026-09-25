@@ -12,7 +12,7 @@ function Stage3() {
     return (
         <>
             <div className="container">
-                <h1 className="title">Этап 3 - Презентация продукта</h1>
+                <h1 className="title">Этап 3 - Презентационный каталог продукции</h1>
                 <h2 className="subtitle">Презентационные фотографии продукта</h2>
 
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}

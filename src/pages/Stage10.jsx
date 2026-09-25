@@ -109,7 +109,7 @@ function Stage10() {
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
                 {error && <p className="form-error">{error}</p>}
 
-                <h2 className="subtitle">Количество товара на складе</h2>
+                <h2 className="subtitle">Выберите склад и укажите количество продукта на каждом складе</h2>
 
                 <button
                     className="add-address-btn"

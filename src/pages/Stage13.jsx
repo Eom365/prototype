@@ -454,6 +454,10 @@ function Stage13() {
                     Этап 13 - Выберите характеристики которые могут изменяться
                     <span className="info-icon" title="Подсказка">?</span>
                 </h1>
+                <h1 className="title">
+                    Этап 13 - Выберите характеристики которые могут изменяться
+                    <span className="info-icon" title="Подсказка">?</span>
+                </h1>
 
                 {error && <p className="form-error">{error}</p>}
 

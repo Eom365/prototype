@@ -92,7 +92,8 @@ function Stage7() {
     return (
         <>
             <div className="container stage7-page">
-                <h2 className="subtitle">Этап 7 - Добавьте документы</h2>
+                <h1 className="title">Этап 7 - Документы на продукт </h1>
+                <h2 className="subtitle">Добавьте документы</h2>
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
                 {error && <p className="form-error">{error}</p>}
 

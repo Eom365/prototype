@@ -90,11 +90,6 @@ export default function Stage5Description({ form, onChange }) {
                     placeholder="Для чего он используется?"
                 />
                 <DescriptionInput
-                    value={form.description.design}
-                    onChange={(value) => onChange('description', { ...form.description, design: value })}
-                    placeholder="Особенности конструкции"
-                />
-                <DescriptionInput
                     value={form.description.principle}
                     onChange={(value) => onChange('description', { ...form.description, principle: value })}
                     placeholder="Принцип работы продукта"
@@ -120,7 +115,7 @@ export default function Stage5Description({ form, onChange }) {
                 </div>
             </DescriptionBlock>
 
-            <DescriptionBlock title="Область применения продукта">
+            <DescriptionBlock title="Область эксплуатации продукта">
                 <DescriptionInput
                     value={form.applicationArea.sphere}
                     onChange={(value) => onChange('applicationArea', { ...form.applicationArea, sphere: value })}

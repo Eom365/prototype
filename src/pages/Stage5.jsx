@@ -135,18 +135,29 @@ function Stage5() {
     return (
         <>
             <div className="container">
-                <h1 className="title">Этап 5 - Описание и характеристики продукта</h1>
-                <h2 className="subtitle">Введите описание товара:</h2>
-                {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
+                <h1 className="title">Этап 5 — Описание и характеристики продукта</h1>
+
+                {!productId && (
+                    <p className="form-error">Откройте создание карточки с главной страницы.</p>
+                )}
                 {error && <p className="form-error">{error}</p>}
 
+                {/* ===== ОПИСАНИЕ ===== */}
+                <h2 className="subtitle">Введите описание товара:</h2>
                 <Stage5Description
                     form={descriptionForm}
-                    onChange={(section, value) => setDescriptionForm((prev) => ({ ...prev, [section]: value }))}
+                    onChange={(section, value) =>
+                        setDescriptionForm((prev) => ({ ...prev, [section]: value }))
+                    }
                 />
 
+                {/* ===== ХАРАКТЕРИСТИКИ ===== */}
                 <h2 className="subtitle subtitle--spaced">Заполните характеристики продукта:</h2>
-                {!kind && <p className="paragraph">Сначала выберите вид продукта на этапе 2. От него зависит набор характеристик.</p>}
+                {!kind && (
+                    <p className="paragraph">
+                        Сначала выберите вид продукта на этапе 2. От него зависит набор характеристик.
+                    </p>
+                )}
 
                 <div className="form">
                     <input
@@ -160,35 +171,75 @@ function Stage5() {
                     {groups.map((group) => (
                         <div key={group.name}>
                             <h3 className="subtitle subtitle--spaced">{group.name}</h3>
-                            {group.name === 'Производитель' && (
-                                <div className="field-row">
-                                    <span className="info-icon" title="Подсказка">ⓘ</span>
-                                    <span className="field-name">Логотип</span>
-                                    {logo ? (
-                                        <div className="field-input field-input--file field-input--has-file">
-                                            <img src={logo.url} alt="Логотип" className="file-preview" />
-                                            <span className="file-text">{logo.name}</span>
-                                            <button type="button" className="file-remove" onClick={handleLogoRemove} title="Удалить">
-                                                ✕
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <button type="button" className="field-input field-input--file" onClick={() => logoInputRef.current?.click()}>
-                                            <span className="file-icon">📎</span>
-                                            <span className="file-text">Загрузить фотографию</span>
-                                        </button>
-                                    )}
-                                </div>
-                            )}
-                            {group.fields.filter((field) => !(field.code === 'lightSource' && specs.light?.value === 'no')).map((field) => (
-                                <CharacteristicRow
-                                    key={field.code}
-                                    field={field}
-                                    value={specs[field.code]}
-                                    unitGroups={catalog?.unitGroups}
-                                    onChange={(patch) => updateSpec(field.code, patch)}
-                                />
-                            ))}
+
+                            {group.fields
+                                .filter((field) => !(field.code === 'lightSource' && specs.light?.value === 'no'))
+                                .map((field) => (
+                                    <div key={field.code}>
+                                        {group.name === 'Производитель' && field.code === 'brand' && (
+                                            <p className="field-description">
+                                                Бренд - это название товарного знака, под которым продается товар.
+                                                Кто может заполнять:
+                                                Только правообладатель товарного знака. Для подтверждения потребуется загрузить "Свидетельство на товарный знак" на Этапе 7 "Документы на продукт".
+                                                Если вы продаете оригинальный товар, но не являетесь правообладателем - не заполняйте это поле.
+                                                <br />Пример правильного заполнения : "ОМ 365"
+                                            </p>
+                                        )}
+
+                                        <CharacteristicRow
+                                            field={field}
+                                            value={specs[field.code]}
+                                            unitGroups={catalog?.unitGroups}
+                                            onChange={(patch) => updateSpec(field.code, patch)}
+                                        />
+
+                                        {group.name === 'Производитель' && field.code === 'brand' && (
+                                            <>
+                                                <p className="field-description">
+                                                    Логотип - графическое изображение товарного знака.
+                                                    Кто может заполнять:
+                                                    Только правообладатель товарного знака.
+                                                    Если вы продаете оригинальный товар, но не являетесь правообладателем - не загружайте логотип.
+                                                    <br />Пример правильного заполнения :
+                                                    <img
+                                                        src="/images/brand.png"
+                                                        alt="Пример бренда"
+                                                        className="inline-img"
+                                                    />
+                                                </p>
+
+                                                <div className="field-row">
+                                                    <span className="info-icon" title="Подсказка">ⓘ</span>
+                                                    <span className="field-name">Логотип</span>
+
+                                                    {logo ? (
+                                                        <div className="field-input field-input--file field-input--has-file">
+                                                            <img src={logo.url} alt="Логотип" className="file-preview" />
+                                                            <span className="file-text">{logo.name}</span>
+                                                            <button
+                                                                type="button"
+                                                                className="file-remove"
+                                                                onClick={handleLogoRemove}
+                                                                title="Удалить"
+                                                            >
+                                                                ✕
+                                                            </button>
+                                                        </div>
+                                                    ) : (
+                                                        <button
+                                                            type="button"
+                                                            className="field-input field-input--file"
+                                                            onClick={() => logoInputRef.current?.click()}
+                                                        >
+                                                            <span className="file-icon">📎</span>
+                                                            <span className="file-text">Загрузить фотографию</span>
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                ))}
                         </div>
                     ))}
 
@@ -269,7 +320,9 @@ function CharacteristicRow({ field, value, unitGroups, onChange }) {
                 </select>
             )}
 
-            {field.required && <span className="required-mark">✱</span>}
+            {field.required && field.code !== 'brand' && (
+                <span className="required-mark">✱</span>
+            )}
         </div>
     )
 }

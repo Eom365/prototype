@@ -54,7 +54,8 @@ function Stage8() {
     return (
         <>
             <div className="container">
-                <h1 className="title">Этап 8. Добавьте упаковку</h1>
+                <h1 className="title">Этап 8. Заводская упаковка продукта</h1>
+                <h2 className="subtitle">Добавьте описание заводской упаковки, в которой продукт поступает к покупателю.</h2>
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
                 {error && <p className="form-error">{error}</p>}
 
@@ -158,7 +159,7 @@ function Stage8() {
                 </div>
 
                 <div className="section">
-                    <h2 className="subtitle">Добавьте фотографии упаковки:</h2>
+                    <h2 className="subtitle">Добавьте фотографии упаковки продукта:</h2>
                     {productId && <PhotoGallery productId={productId} role="package" />}
                 </div>
             </div>

@@ -68,8 +68,11 @@ function Stage9() {
         <>
             <div className="container stage9-page">
                 <h1 className="title">
-                    Этап 9. Добавьте стоимость товара и систему лояльности
+                    Этап 9. Стоимость товара и система лояльности.
                 </h1>
+                <h2 className="subtitle">
+                Укажите стоимость товара и выберите систему лояльности
+                </h2>
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
                 {error && <p className="form-error">{error}</p>}
 
@@ -123,7 +126,7 @@ function Stage9() {
                     </h2>
 
                     <p className="loyalty-subtitle">
-                        Предоставить скидку от количества продукта
+                        1.Предоставить скидку от количества продукта
                     </p>
 
                     {discounts.map((discount, index) => (

@@ -1,3 +1,11 @@
+.title {
+    font-size: 28px;
+        font-weight: 700;
+        letter-spacing: normal;
+        margin: 0 0 12px;
+        color: #111;
+}
+
 .container {
     max-width: 900px;
     margin: 0 auto;
@@ -38,6 +46,15 @@
     outline: none;
     box-sizing: border-box;
     color: #333;
+}
+
+.inline-img {
+    height: 60px;
+    width: auto;
+    vertical-align: middle;
+    margin: 16px 6px;
+    display: inline-block;
+    outline: solid;
 }
 
 .desc-input::placeholder {
@@ -159,6 +176,11 @@
     color: #666;
     font-size: 18px;
     line-height: 1;
+}
+
+.field-description {
+    text-align: left;
+    margin: 36px;
 }
 
 @media (max-width: 768px) {
