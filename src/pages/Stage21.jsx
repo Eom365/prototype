@@ -18,13 +18,6 @@ function Stage21() {
             <div className="container">
                 <h1 className="title">Этап 21 - Предварительный просмотр</h1>
                 <h2 className="subtitle">*Открывается заполненная карточка товара для просмотра*</h2>
-
-                <div className="links">
-                    <span className="link link--disabled">
-                        Посмотреть карточку товара на сайте
-                        <span className="link__arrow">›</span>
-                    </span>
-                </div>
             </div>
 
             <BottomBar
