@@ -117,6 +117,7 @@ function Stage17() {
                                 style={{ display: 'none' }}
                             />
                             <div className={`field-control${name === 'warranty' ? ' field-control--warranty' : ''}`}>
+                                {requiredFields.has(name) && <span className="required-mark">✱</span>}
                                 <div className="file-input">
                                     <input
                                         type="text"
@@ -144,7 +145,6 @@ function Stage17() {
                                         📎
                                     </button>
                                 </div>
-                                {requiredFields.has(name) && <span className="required-mark">✱</span>}
                                 {name === 'warranty' && (
                                     <button type="button" className="template-btn">
                                         Шаблон

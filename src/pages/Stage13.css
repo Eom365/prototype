@@ -33,6 +33,15 @@
     flex-shrink: 0;
 }
 
+.section-description {
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.55;
+    color: #444;
+    margin: 0 0 30px;
+    max-width: none;
+}
+
 .description {
     font-size: 14px;
     color: #333;
