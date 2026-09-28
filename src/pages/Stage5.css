@@ -496,3 +496,7 @@
 .custom-spec-row__unit-custom {
     grid-column: 3 / 5;
 }
+
+.oneimg {
+    width: 600px;
+}

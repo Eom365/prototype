@@ -223,6 +223,8 @@ function Stage5() {
                                     <div key={field.code}>
                                         {group.name === 'Основные' && field.code === 'model' && (
                                             <>
+                                                <img alt="Линейка и бренд" class="oneimg" src="/images/one.png"></img>
+
                                                 <div className="field-row product-line-row">
                                                     <span className="info-icon" title="Подсказка">ⓘ</span>
                                                     <span className="field-name">Линейка продукции</span>
