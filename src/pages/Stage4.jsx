@@ -10,8 +10,25 @@ function Stage4() {
     return (
         <>
             <div className="container">
-                <h1 className="title">Этап 4 - Фотографии продукта</h1>
+                <h1 className="title">Этап 4 — Фотографии продукта</h1>
                 <h2 className="subtitle">Добавьте фотографии продукта</h2>
+                <p className="section-description">
+                    Загрузите изображения одного конкретного изделия: общий вид, ракурсы, детали,
+                    комплектация. На каждом фото должен быть показан один товар, а не линейка
+                    или ассортимент продукции.
+                </p>
+                <p className="pBold">Пример правильного заполнения:</p>
+
+                <div className="presentation-images">
+                    <img
+                        src="/images/product-single-example1.png"
+                        alt="Пример: одно изделие — смартфон с двух ракурсов"
+                    />
+                    <img
+                        src="/images/product-single-example2.png"
+                        alt="Пример: одно изделие — стоматологический наконечник"
+                    />
+                </div>
 
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
                 {productId && <PhotoGallery productId={productId} role="product" />}

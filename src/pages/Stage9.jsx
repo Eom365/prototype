@@ -150,22 +150,7 @@ function Stage9() {
               </button>
 
               <div className="loyalty-row__content">
-                <span className="loyalty-text">
-                  Стоимость за единицу продукта составит
-                </span>
-                <span className="loyalty-currency">
-                  {currencySymbols[currency]}
-                </span>
-                <input
-                  type="text"
-                  className="loyalty-input loyalty-input--price"
-                  value={discount.value}
-                  onChange={(e) =>
-                    handleDiscountChange(index, "value", e.target.value)
-                  }
-                  disabled={!discount.enabled}
-                />
-                <span className="loyalty-text">при покупке от</span>
+                <span className="loyalty-text">При покупке от</span>
                 <input
                   type="text"
                   className="loyalty-input loyalty-input--small"
@@ -185,7 +170,21 @@ function Stage9() {
                   }
                   disabled={!discount.enabled}
                 />
-                <span className="loyalty-text">штук.</span>
+                <span className="loyalty-text">
+                  Стоимость за единицу продукта составит
+                </span>
+                <span className="loyalty-currency">
+                  {currencySymbols[currency]}
+                </span>
+                <input
+                  type="text"
+                  className="loyalty-input loyalty-input--price"
+                  value={discount.value}
+                  onChange={(e) =>
+                    handleDiscountChange(index, "value", e.target.value)
+                  }
+                  disabled={!discount.enabled}
+                />
                 <span className="info-icon" title="Подсказка">
                   ⓘ
                 </span>

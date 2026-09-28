@@ -10,8 +10,25 @@ function Stage14() {
     return (
         <>
             <div className="container">
-                <h1 className="title">Этап 14 - Фотографии продукта</h1>
+                <h1 className="title">Этап 14 — Фотографии продукта</h1>
                 <h2 className="subtitle">Добавьте фотографии продукта</h2>
+                <p className="section-description">
+                    Загрузите изображения одного конкретного варианта изделия: общий вид, ракурсы,
+                    детали. На каждом фото — только этот вариант товара, без ассортимента линейки.
+                </p>
+                <p className="pBold">Пример правильного заполнения:</p>
+
+                <div className="presentation-images">
+                    <img
+                        src="/images/product-single-example1.png"
+                        alt="Пример: одно изделие — смартфон с двух ракурсов"
+                    />
+                    <img
+                        src="/images/product-single-example2.png"
+                        alt="Пример: одно изделие — стоматологический наконечник"
+                    />
+                </div>
+
                 <VariationPreview stage={14} />
 
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
