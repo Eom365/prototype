@@ -1,5 +1,5 @@
 .stage19-page.container {
-    max-width: 700px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 40px 20px 100px;
     overflow: visible;
@@ -123,9 +123,17 @@
 .stage19-page .loyalty-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     margin-bottom: 14px;
-    flex-wrap: wrap;
+}
+
+.stage19-page .loyalty-row__content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+    flex-wrap: nowrap;
 }
 
 .stage19-page .loyalty-text {
@@ -156,9 +164,18 @@
 }
 
 .stage19-page .loyalty-input--price {
-    width: 60px;
+    width: 72px;
     padding: 3px 6px;
     font-size: 13px;
+    flex-shrink: 0;
+}
+
+.stage19-page .loyalty-input--small,
+.stage19-page .loyalty-currency,
+.stage19-page .loyalty-text,
+.stage19-page .loyalty-row .info-icon,
+.stage19-page .loyalty-row .required-mark {
+    flex-shrink: 0;
 }
 
 .stage19-page .loyalty-input:disabled {
@@ -172,7 +189,6 @@
     font-size: 16px;
     font-weight: bold;
     color: #c0392b;
-    margin-left: 6px;
 }
 
 .stage19-page .toggle {

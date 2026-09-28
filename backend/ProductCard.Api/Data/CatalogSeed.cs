@@ -21,6 +21,7 @@ public static class CatalogSeed
         {
             EnsureAerosolFields(db);
             EnsureHandpieceSubtypes(db);
+            EnsureOtherKind(db);
             return;
         }
 
@@ -48,6 +49,7 @@ public static class CatalogSeed
             ["straight_increasing"] = Kind(handpieces, "straight_increasing", "Повышающий", 4),
             ["straight_1_1"] = Kind(handpieces, "straight_1_1", "1:1", 5),
             ["turbine"] = Kind(handpieces, "turbine", "Турбинный наконечник", 6),
+            ["other"] = Kind(handpieces, "other", "Иное", 7),
             ["lubricant"] = Kind(aerosols, "lubricant", "Масло для смазки", 1),
             ["cleaner"] = Kind(aerosols, "cleaner", "Очиститель", 2)
         };
@@ -64,6 +66,7 @@ public static class CatalogSeed
         links.AddRange(Links(kinds["straight_increasing"], definitions, StraightIncreasingFields()));
         links.AddRange(Links(kinds["straight_1_1"], definitions, Straight11Fields()));
         links.AddRange(Links(kinds["turbine"], definitions, TurbineFields()));
+        links.AddRange(Links(kinds["other"], definitions, CommonFields()));
         links.AddRange(Links(kinds["lubricant"], definitions, AerosolFields()));
         links.AddRange(Links(kinds["cleaner"], definitions, AerosolFields()));
 
@@ -417,6 +420,30 @@ public static class CatalogSeed
         MigrateHandpieceProducts(db);
         db.SaveChanges();
         RemoveLegacyHandpieceKinds(db);
+        db.SaveChanges();
+    }
+
+    private static void EnsureOtherKind(AppDbContext db)
+    {
+        var handpieces = db.ProductCategories.FirstOrDefault(item => item.Code == "handpieces");
+        if (handpieces == null)
+            return;
+
+        var definitions = db.CharacteristicDefinitions.ToDictionary(item => item.Code);
+        if (!definitions.ContainsKey("model"))
+            return;
+
+        var kind = db.ProductKinds.FirstOrDefault(item => item.Code == "other");
+        if (kind == null)
+        {
+            kind = Kind(handpieces, "other", "Иное", 7);
+            db.ProductKinds.Add(kind);
+            db.SaveChanges();
+        }
+
+        if (!db.ProductKindCharacteristics.Any(item => item.ProductKindId == kind.Id))
+            db.ProductKindCharacteristics.AddRange(Links(kind, definitions, CommonFields()));
+
         db.SaveChanges();
     }
 

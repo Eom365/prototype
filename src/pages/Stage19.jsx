@@ -133,7 +133,7 @@ function Stage19() {
           </h2>
 
           <p className="loyalty-subtitle">
-            Предоставить скидку от количества продукта
+            1.Предоставить скидку от количества продукта
           </p>
 
           {discounts.map((discount, index) => (
@@ -150,52 +150,48 @@ function Stage19() {
                 <span className="toggle__knob" />
               </button>
 
-              <span className="loyalty-text">
-                Стоимость продукта при покупке от
-              </span>
-
-              <input
-                type="text"
-                className="loyalty-input loyalty-input--small"
-                value={discount.from}
-                onChange={(e) =>
-                  handleDiscountChange(index, "from", e.target.value)
-                }
-                disabled={!discount.enabled}
-              />
-
-              <span className="loyalty-text">до</span>
-
-              <input
-                type="text"
-                className="loyalty-input loyalty-input--small"
-                value={discount.to}
-                onChange={(e) =>
-                  handleDiscountChange(index, "to", e.target.value)
-                }
-                disabled={!discount.enabled}
-              />
-
-              <span className="loyalty-text">штук</span>
-
-              <span className="loyalty-currency">
-                {currencySymbols[currency]}
-              </span>
-
-              <input
-                type="text"
-                className="loyalty-input loyalty-input--price"
-                value={discount.value}
-                onChange={(e) =>
-                  handleDiscountChange(index, "value", e.target.value)
-                }
-                disabled={!discount.enabled}
-              />
-
-              <span className="info-icon" title="Подсказка">
-                ⓘ
-              </span>
-              {index === 0 && <span className="required-mark">✱</span>}
+              <div className="loyalty-row__content">
+                <span className="loyalty-text">
+                  Стоимость за единицу продукта составит
+                </span>
+                <span className="loyalty-currency">
+                  {currencySymbols[currency]}
+                </span>
+                <input
+                  type="text"
+                  className="loyalty-input loyalty-input--price"
+                  value={discount.value}
+                  onChange={(e) =>
+                    handleDiscountChange(index, "value", e.target.value)
+                  }
+                  disabled={!discount.enabled}
+                />
+                <span className="loyalty-text">при покупке от</span>
+                <input
+                  type="text"
+                  className="loyalty-input loyalty-input--small"
+                  value={discount.from}
+                  onChange={(e) =>
+                    handleDiscountChange(index, "from", e.target.value)
+                  }
+                  disabled={!discount.enabled}
+                />
+                <span className="loyalty-text">до</span>
+                <input
+                  type="text"
+                  className="loyalty-input loyalty-input--small"
+                  value={discount.to}
+                  onChange={(e) =>
+                    handleDiscountChange(index, "to", e.target.value)
+                  }
+                  disabled={!discount.enabled}
+                />
+                <span className="loyalty-text">штук.</span>
+                <span className="info-icon" title="Подсказка">
+                  ⓘ
+                </span>
+                {index === 0 && <span className="required-mark">✱</span>}
+              </div>
             </div>
           ))}
         </div>

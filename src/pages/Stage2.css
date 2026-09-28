@@ -70,6 +70,11 @@
     flex-shrink: 0;
 }
 
+.other-kind-input {
+    margin: 8px 0 4px 24px;
+    width: calc(100% - 24px);
+}
+
 .subtype-block__options {
     display: flex;
     flex-direction: column;

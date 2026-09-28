@@ -14,7 +14,11 @@ function getPurposeRoot(purpose) {
     return purpose === 'Стоматология' ? 'Профессиональная стоматология' : 'Стоматология'
 }
 
+export const OTHER_KIND_CODE = 'other'
+const OTHER_PURPOSE = 'Иное'
+
 function getProductName(kind, categoryCode) {
+    if (kind.code === OTHER_KIND_CODE) return ''
     if (categoryCode === 'handpieces') {
         return handpieceProductName(kind.code, kind.name)
     }
@@ -22,6 +26,7 @@ function getProductName(kind, categoryCode) {
 }
 
 function getCategoryPath(kind, categoryName, purpose) {
+    if (kind.code === OTHER_KIND_CODE) return ''
     const parent = handpieceParentForKind(kind.code)
     if (parent) {
         return `${getPurposeRoot(purpose)} > ${categoryName} > ${parent.name} > ${kind.name}`
@@ -50,8 +55,10 @@ function Stage2() {
     useEffect(() => {
         if (!productId) return
         productsApi.get(productId).then((product) => {
-            setPurpose(product.currentStage >= 2 ? (product.purpose || '') : '')
-            setKindCode(product.kindCode || '')
+            const savedKind = product.kindCode || ''
+            const savedPurpose = product.currentStage >= 2 ? (product.purpose || '') : ''
+            setKindCode(savedKind)
+            setPurpose(savedKind === OTHER_KIND_CODE ? OTHER_PURPOSE : savedPurpose)
             setProductName(product.productName || '')
             setCategoryPath(product.categoryPath || '')
             setProductLine(product.productLine || '')
@@ -60,7 +67,8 @@ function Stage2() {
     }, [productId])
 
     useEffect(() => {
-        if (!catalog || !kindCode || categoryCode || !purpose) return
+        if (!catalog || !kindCode || categoryCode || purpose !== 'Стоматология') return
+        if (kindCode === OTHER_KIND_CODE) return
         for (const category of catalog.categories) {
             if (category.kinds.some((kind) => kind.code === kindCode)) {
                 setCategoryCode(category.code)
@@ -119,12 +127,35 @@ function Stage2() {
     const selectPurpose = (value) => {
         if (purpose === value) return
         setPurpose(value)
+        if (kindCode === OTHER_KIND_CODE) {
+            setKindCode('')
+            setCategoryCode('')
+            setHandpieceParent('')
+            setProductName('')
+            setCategoryPath('')
+            return
+        }
         if (!kindCode || !categoryCode || !catalog) return
         const category = catalog.categories.find((item) => item.code === categoryCode)
         const kind = category?.kinds.find((item) => item.code === kindCode)
         if (kind && category) {
             setCategoryPath(getCategoryPath(kind, category.name, value))
         }
+    }
+
+    const selectOtherPurpose = () => {
+        if (purpose === OTHER_PURPOSE) return
+        setPurpose(OTHER_PURPOSE)
+        setCategoryCode('')
+        setHandpieceParent('')
+        setKindCode(OTHER_KIND_CODE)
+        setProductName('')
+        setCategoryPath('')
+    }
+
+    const setOtherText = (text) => {
+        setProductName(text)
+        setCategoryPath(text)
     }
 
     const handleClearAll = () => {
@@ -134,6 +165,8 @@ function Stage2() {
         setProductName('')
         setCategoryPath('')
     }
+
+    const dentistrySelected = purpose === 'Стоматология'
 
     const save = () => {
         if (!productId) throw new Error('Сначала создайте карточку на главной странице')
@@ -166,12 +199,33 @@ function Stage2() {
                         />
                         Стоматология
                     </label>
+                    <div className="subtype-block">
+                        <label className="radio-label">
+                            <input
+                                type="radio"
+                                name="purpose"
+                                value={OTHER_PURPOSE}
+                                checked={purpose === OTHER_PURPOSE}
+                                onChange={selectOtherPurpose}
+                            />
+                            Иное
+                        </label>
+                        {purpose === OTHER_PURPOSE && (
+                            <input
+                                type="text"
+                                className="input other-kind-input"
+                                placeholder="Введите своё значение"
+                                value={productName}
+                                onChange={(event) => setOtherText(event.target.value)}
+                            />
+                        )}
+                    </div>
                 </div>
 
                 <p className="paragraph">Выберите тип продукта</p>
                 {catalog?.categories.map((category) => (
                     <div
-                        className={`category-block${purpose ? '' : ' category-block--disabled'}`}
+                        className={`category-block${dentistrySelected ? '' : ' category-block--disabled'}`}
                         key={category.code}
                     >
                         <label className="radio-label radio-label--category">
@@ -179,8 +233,8 @@ function Stage2() {
                                 type="radio"
                                 name="category"
                                 value={category.code}
-                                checked={Boolean(purpose) && categoryCode === category.code}
-                                disabled={!purpose}
+                                checked={dentistrySelected && categoryCode === category.code}
+                                disabled={!dentistrySelected}
                                 onChange={() => selectCategory(category.code)}
                             />
                             {category.name}
@@ -194,8 +248,8 @@ function Stage2() {
                                                 type="radio"
                                                 name="handpieceParent"
                                                 value={parentCode}
-                                                checked={Boolean(purpose) && handpieceParent === parentCode}
-                                                disabled={!purpose}
+                                                checked={dentistrySelected && handpieceParent === parentCode}
+                                                disabled={!dentistrySelected}
                                                 onChange={() => selectHandpieceParent(parentCode, category)}
                                             />
                                             {parent.name}
@@ -211,8 +265,8 @@ function Stage2() {
                                                                 type="radio"
                                                                 name="kind"
                                                                 value={kind.code}
-                                                                checked={Boolean(purpose) && kindCode === kind.code}
-                                                                disabled={!purpose}
+                                                                checked={dentistrySelected && kindCode === kind.code}
+                                                                disabled={!dentistrySelected}
                                                                 onChange={() => selectKind(kind, category.code)}
                                                             />
                                                             {kind.name}
@@ -223,21 +277,20 @@ function Stage2() {
                                         )}
                                     </div>
                                 ))
-                            ) : (
-                                category.kinds.map((kind) => (
-                                    <label className="radio-label" key={kind.code}>
-                                        <input
-                                            type="radio"
-                                            name="kind"
-                                            value={kind.code}
-                                            checked={Boolean(purpose) && kindCode === kind.code}
-                                            disabled={!purpose}
-                                            onChange={() => selectKind(kind, category.code)}
-                                        />
-                                        {kind.name}
-                                    </label>
-                                ))
-                            )}
+                            ) : null}
+                            {category.code !== 'handpieces' && category.kinds.map((kind) => (
+                                <label className="radio-label" key={kind.code}>
+                                    <input
+                                        type="radio"
+                                        name="kind"
+                                        value={kind.code}
+                                        checked={dentistrySelected && kindCode === kind.code}
+                                        disabled={!dentistrySelected}
+                                        onChange={() => selectKind(kind, category.code)}
+                                    />
+                                    {kind.name}
+                                </label>
+                            ))}
                         </div>
                     </div>
                 ))}
