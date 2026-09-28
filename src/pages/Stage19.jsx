@@ -172,7 +172,7 @@ function Stage19() {
                   disabled={!discount.enabled}
                 />
                 <span className="loyalty-text">
-                  Стоимость за единицу продукта составит
+                  штук, стоимость за единицу продукта составит
                 </span>
                 <span className="loyalty-currency">
                   {currencySymbols[currency]}
