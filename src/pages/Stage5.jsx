@@ -13,13 +13,13 @@ import './Stage5.css'
 
 const DIMENSIONS_HINT_IMAGE = '/images/dimensions.png'
 
-const PRODUCT_LINE_HINT = `Пример 1: Смартфон iPhone 15 Pro Max.
-Модели продукта: 15, 15 Pro, 15 Pro Max.
-Линейка продукта: iPhone.
+const FIELD_PLACEHOLDERS = {
+    article: 'Семь цифр: 1234567',
+}
 
-Пример 2: Ноутбук MateBook X Pro.
-Модели продукта: D, X, X Pro.
-Линейка продукта: MateBook.`
+const FIELD_LABELS = {
+    article: 'Артикул площадки',
+}
 
 const defaultUnits = {
     weight: 'gram',
@@ -222,20 +222,27 @@ function Stage5() {
                                 .map((field) => (
                                     <div key={field.code}>
                                         {group.name === 'Основные' && field.code === 'model' && (
-                                            <div className="field-row product-line-row">
-                                                <span className="info-icon" title="Подсказка">ⓘ</span>
-                                                <span className="field-name">Линейка продукции</span>
-                                                <div className="product-line-control">
-                                                    <input
-                                                        type="text"
-                                                        className="field-input"
-                                                        placeholder="Линейка продукции"
-                                                        value={productLine}
-                                                        onChange={(event) => setProductLine(event.target.value)}
-                                                    />
-                                                    <span className="hint-icon hint-icon--inline" data-hint={PRODUCT_LINE_HINT}>?</span>
+                                            <>
+                                                <div className="field-row product-line-row">
+                                                    <span className="info-icon" title="Подсказка">ⓘ</span>
+                                                    <span className="field-name">Линейка продукции</span>
+                                                    <div className="product-line-control">
+                                                        <input
+                                                            type="text"
+                                                            className="field-input"
+                                                            placeholder="Линейка продукции"
+                                                            value={productLine}
+                                                            onChange={(event) => setProductLine(event.target.value)}
+                                                        />
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                <p className="field-description">
+                                                    <b>Линейка продукции</b> — это группа моделей товаров одного бренда, объединённых общим названием.
+                                                    <br />Пример 1: Смартфон iPhone 15.<br />Смартфон iPhone 15 Pro.<br />Смартфон iPhone 15 Pro Max.<br /> Линейка — <b>iPhone</b>, модели внутри — 15, 15 Pro, 15 Pro Max.
+                                                    <br />Пример 2: Ноутбук MateBook D.<br />Ноутбук MateBook X.<br />Ноутбук MateBook X Pro.<br /> Линейка — <b>MateBook</b>, модели внутри — D, X, X Pro.
+                                                    <br />Если товар единственный и линейки нет — поле можно не заполнять.
+                                                </p>
+                                            </>
                                         )}
 
                                         {group.name === 'Производитель' && field.code === 'brand' && (
@@ -323,11 +330,12 @@ function Stage5() {
 function CharacteristicRow({ field, value, unitGroups, onChange }) {
     const current = value || { value: '', customValue: '', unit: '' }
     const units = field.unitGroup ? unitGroups?.[field.unitGroup] || [] : []
+    const placeholder = FIELD_PLACEHOLDERS[field.code] || 'Значение'
 
     return (
         <div className={`field-row ${field.inputType === 'choice' ? 'field-row--options' : ''}`}>
             <span className="info-icon" title="Подсказка">ⓘ</span>
-            <span className="field-name">{field.name}</span>
+            <span className="field-name">{FIELD_LABELS[field.code] || field.name}</span>
 
             {field.inputType === 'choice' ? (
                 <div className="option-group">
@@ -364,7 +372,7 @@ function CharacteristicRow({ field, value, unitGroups, onChange }) {
                 <input
                     type="text"
                     className="field-input"
-                    placeholder="Значение"
+                    placeholder={placeholder}
                     value={current.value}
                     onChange={(event) => onChange({ value: event.target.value })}
                 />
