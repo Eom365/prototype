@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { notifyProductUpdated } from '../api'
 import './BottomBar.css'
 
-function BottomBar({ current, total = 21, nextPath, prevPath, onSave, onFinish, onNext }) {
+function BottomBar({ current, total = 11, nextPath, prevPath, onSave, onFinish, onNext }) {
     const navigate = useNavigate()
     const location = useLocation()
     const [params] = useSearchParams()
@@ -37,7 +37,7 @@ function BottomBar({ current, total = 21, nextPath, prevPath, onSave, onFinish, 
         <div className="bottom-bar">
             <div className="bottom-bar__col">
                 <span className="bottom-bar__stage">
-                    Этап {current} из {total}
+                    {current} из {total}
                 </span>
             </div>
 

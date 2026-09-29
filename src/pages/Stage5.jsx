@@ -324,7 +324,7 @@ function Stage5() {
                 </div>
             </div>
 
-            <BottomBar current={5} total={21} prevPath="/stage4" nextPath="/stage6" onSave={save} />
+            <BottomBar current={5} total={11} prevPath="/stage4" nextPath="/stage6" onSave={save} />
         </>
     )
 }

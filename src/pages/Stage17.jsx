@@ -100,10 +100,10 @@ function Stage17() {
     return (
         <>
             <div className="container stage17-page">
-                <h2 className="subtitle">Этап 17 - Добавьте документы</h2>
+                <h2 className="subtitle">Этап 6 — Добавьте документы</h2>
                 <VariationPreview stage={17} />
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
-                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 13.</p>}
+                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 2.</p>}
                 {error && <p className="form-error">{error}</p>}
 
                 <div className="form">
@@ -183,7 +183,7 @@ function Stage17() {
                 )}
             </div>
 
-            <BottomBar current={17} total={21} prevPath="/stage16" nextPath="/stage18" />
+            <BottomBar current={6} total={10} prevPath="/stage16" nextPath="/stage18" />
         </>
     )
 }

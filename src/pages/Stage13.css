@@ -815,6 +815,20 @@
     background: #fadbd8;
 }
 
+.variant-card__section--done {
+    background: #d5f5e3;
+    border-color: #2ecc71;
+    color: #1e8449;
+}
+
+.variant-card__section--done:hover {
+    background: #c1f0d1;
+}
+
+.variant-card__section--done .variant-card__arrow {
+    color: #1e8449;
+}
+
 .variant-card__section--preview {
     background: #eafaf1;
     border-color: #2ecc71;
@@ -872,20 +886,6 @@
 /* ===== Карточка "заполнена" (зелёная) ===== */
 .variant-card--completed {
     border-color: #2ecc71;
-}
-
-.variant-card--completed .variant-card__section--pending {
-    background: #d5f5e3;
-    border-color: #2ecc71;
-    color: #1e8449;
-}
-
-.variant-card--completed .variant-card__section--pending:hover {
-    background: #c1f0d1;
-}
-
-.variant-card--completed .variant-card__arrow {
-    color: #1e8449;
 }
 
 .variant-card--completed .variant-card__status {

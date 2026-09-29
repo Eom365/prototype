@@ -45,7 +45,7 @@ function Stage18() {
 
     const save = () => {
         if (!productId) throw new Error('Сначала создайте карточку на главной странице')
-        if (!variationId) throw new Error('Сначала создайте вариант на этапе 13')
+        if (!variationId) throw new Error('Сначала создайте вариант на этапе 2')
         if (!loaded) throw new Error('Карточка ещё загружается, подождите секунду')
         return productsApi.saveVariationPackaging(productId, variationId, {
             packType,
@@ -66,10 +66,10 @@ function Stage18() {
     return (
         <>
             <div className="container">
-                <h1 className="title">Этап 18. Добавьте упаковку</h1>
+                <h1 className="title">Этап 7 — Добавьте упаковку</h1>
                 <VariationPreview stage={18} />
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
-                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 13.</p>}
+                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 2.</p>}
                 {error && <p className="form-error">{error}</p>}
 
                 {/* Вид упаковки */}
@@ -340,7 +340,7 @@ function Stage18() {
                 </div>
             </div>
 
-            <BottomBar current={18} total={21} prevPath="/stage17" nextPath="/stage19" onSave={save} />
+            <BottomBar current={7} total={10} prevPath="/stage17" nextPath="/stage19" onSave={save} />
         </>
     )
 }

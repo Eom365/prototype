@@ -25,7 +25,7 @@ function Stage12() {
     return (
         <>
             <div className="container">
-                <h1 className="title">Этап 12 - Вариант параметра продукта</h1>
+                <h1 className="title">Этап 1 — Вариант параметра продукта</h1>
 
                 <p className="description">
                     Вариант параметра продукта — это характеристики, по которым покупатель может выбрать один из нескольких вариантов внутри одной карточки продукта.
@@ -39,6 +39,8 @@ function Stage12() {
                     alt="Вариант параметра продукта - пример"
                 />
             </div>
+
+            <div className="stage12-progress">1 из 10</div>
 
             <div className="action-bar">
                 <button

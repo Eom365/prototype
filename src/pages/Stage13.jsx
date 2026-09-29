@@ -27,11 +27,38 @@ function axisKey(fields, values) {
     }).join('|')
 }
 
-function variationFilled(variation, product) {
+function variationSectionDone(variation, product, section) {
     if (!variation) return false
-    if (variation.reviewStatus === 'pending' || variation.reviewStatus === 'approved') return true
-    if (variation.fullName || variation.price || variation.packType || variation.description) return true
-    return (product?.files || []).some((file) => file.variationId === variation.id)
+    const files = product?.files || []
+    const variationId = variation.id
+    switch (section) {
+        case 'name':
+            return true
+        case 'specs':
+            return Boolean(
+                variation.description?.trim()
+                || variation.complectation?.trim()
+                || variation.applicationArea?.trim(),
+            )
+        case 'docs':
+            return files.some((file) => sameId(file.variationId, variationId) && file.role === 'document')
+        case 'pack':
+            return Boolean(variation.packType?.trim())
+        case 'price':
+            return Boolean(variation.price?.trim())
+        case 'delivery':
+            return pointsFrom(product, variationId).some(
+                (point) => point.active && String(point.quantity || '').trim(),
+            )
+        default:
+            return false
+    }
+}
+
+const variantSectionKeys = ['name', 'specs', 'docs', 'pack', 'price', 'delivery']
+
+function variantSectionClass(done) {
+    return `variant-card__section ${done ? 'variant-card__section--done' : 'variant-card__section--pending'}`
 }
 
 function PhotoStrip({ photos }) {
@@ -229,18 +256,6 @@ function Stage13() {
 
     const [showFormCard, setShowFormCard] = useState(false)
 
-    // ===== Флаг: карточка завершена (зелёная) =====
-    const [isCompleted, setIsCompleted] = useState(false)
-
-    // При загрузке страницы читаем флаг из localStorage
-    useEffect(() => {
-        const completed = localStorage.getItem('variantCompleted') === 'true'
-        setIsCompleted(completed)
-        if (completed) {
-            setShowFormCard(true)
-        }
-    }, [])
-
     const axisCodes = () => Object.keys(selected).filter((code) => selected[code])
 
     const saveAxes = () => {
@@ -260,9 +275,6 @@ function Stage13() {
             setError('Выберите характеристики')
             return
         }
-        localStorage.removeItem('variantCompleted')
-        setIsCompleted(false)
-
         const values = []
         for (const item of selectedFields) {
             const draft = drafts[item.key]
@@ -347,7 +359,13 @@ function Stage13() {
     const sectionsOpen = Boolean(currentVariation)
         && !editingBase
         && (currentVariation.reviewStatus !== 'approved' || editingTarget === currentVariation.id)
-    const filled = variationFilled(currentVariation, bundle) || isCompleted
+    const variantSections = Object.fromEntries(
+        variantSectionKeys.map((key) => [key, variationSectionDone(currentVariation, bundle, key)]),
+    )
+    const allVariantSectionsDone = variantSectionKeys.every((key) => variantSections[key])
+    const filled = currentVariation?.reviewStatus === 'pending'
+        || currentVariation?.reviewStatus === 'approved'
+        || allVariantSectionsDone
 
     const reloadProduct = async () => {
         const product = await productsApi.get(productId)
@@ -451,7 +469,7 @@ function Stage13() {
         <>
             <div className="container">
                 <h1 className="title">
-                    Этап 13 - Создание варианта параметра продукта
+                    Этап 2 — Создание варианта параметра продукта
                     <span className="info-icon" title="Подсказка">?</span>
                 </h1>
                 {/* <h2 className="subtitle">
@@ -870,28 +888,28 @@ function Stage13() {
                                 <div className="variant-card__col">
                                     <button
                                         type="button"
-                                        className="variant-card__section variant-card__section--pending"
+                                        className={variantSectionClass(variantSections.name)}
                                         onClick={() => go('/stage14', currentVariation.id)}
                                     >
                                         Наименование и категория <span className="variant-card__arrow">›</span>
                                     </button>
                                     <button
                                         type="button"
-                                        className="variant-card__section variant-card__section--pending"
+                                        className={variantSectionClass(variantSections.specs)}
                                         onClick={() => go('/stage15', currentVariation.id)}
                                     >
                                         Характеристики <span className="variant-card__arrow">›</span>
                                     </button>
                                     <button
                                         type="button"
-                                        className="variant-card__section variant-card__section--pending"
+                                        className={variantSectionClass(variantSections.docs)}
                                         onClick={() => go('/stage17', currentVariation.id)}
                                     >
                                         Документы <span className="variant-card__arrow">›</span>
                                     </button>
                                     <button
                                         type="button"
-                                        className="variant-card__section variant-card__section--pending"
+                                        className={variantSectionClass(variantSections.pack)}
                                         onClick={() => go('/stage18', currentVariation.id)}
                                     >
                                         Упаковка <span className="variant-card__arrow">›</span>
@@ -901,14 +919,14 @@ function Stage13() {
                                 <div className="variant-card__col">
                                     <button
                                         type="button"
-                                        className="variant-card__section variant-card__section--pending"
+                                        className={variantSectionClass(variantSections.price)}
                                         onClick={() => go('/stage19', currentVariation.id)}
                                     >
                                         Стоимость / Лояльность <span className="variant-card__arrow">›</span>
                                     </button>
                                     <button
                                         type="button"
-                                        className="variant-card__section variant-card__section--pending"
+                                        className={variantSectionClass(variantSections.delivery)}
                                         onClick={() => go('/stage20', currentVariation.id)}
                                     >
                                         Доставка <span className="variant-card__arrow">›</span>
@@ -934,7 +952,7 @@ function Stage13() {
                 )}
             </div>
 
-            <BottomBar current={13} total={21} prevPath="/stage12" nextPath="/stage14" onSave={saveAxes} />
+            <BottomBar current={2} total={10} prevPath="/stage12" nextPath="/stage14" onSave={saveAxes} />
         </>
     )
 }

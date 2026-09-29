@@ -16,7 +16,11 @@ function Review() {
     const approve = async (item) => {
         setError('')
         try {
-            await productsApi.approveReview(item.productId, item.variationId)
+            if (item.variationId) {
+                await productsApi.approveReview(item.productId, item.variationId)
+            } else {
+                await productsApi.approveProductReview(item.productId)
+            }
             await load()
         } catch (approveError) {
             setError(approveError.message)
@@ -31,7 +35,7 @@ function Review() {
             {items.length === 0 && <p className="review-page__empty">Карточек на проверке нет.</p>}
             <div className="review-page__list">
                 {items.map((item) => (
-                    <article className="review-card" key={item.variationId}>
+                    <article className="review-card" key={item.variationId || item.productId}>
                         <h2>{item.title}</h2>
                         <div className="review-card__chips">
                             {(item.chips || []).map((chip) => (

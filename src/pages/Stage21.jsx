@@ -16,13 +16,13 @@ function Stage21() {
     return (
         <>
             <div className="container">
-                <h1 className="title">Этап 21 - Предварительный просмотр</h1>
+                <h1 className="title">Этап 10 — Предварительный просмотр</h1>
                 <h2 className="subtitle">*Открывается заполненная карточка товара для просмотра*</h2>
             </div>
 
             <BottomBar
-                current={21}
-                total={21}
+                current={10}
+                total={10}
                 prevPath="/stage20"
                 onNext={handleNext}
             />
@@ -38,7 +38,6 @@ function Stage21() {
                             type="button"
                             className="modal__btn"
                             onClick={async () => {
-                                localStorage.setItem('variantCompleted', 'true')
                                 const id = new URLSearchParams(location.search).get('id')
                                 if (id) {
                                     try {

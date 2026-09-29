@@ -1,12 +1,14 @@
 import { useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import BottomBar from '../components/BottomBar'
+import { productsApi } from '../api'
 import './Stage11.css'
 
 function Stage11() {
     const navigate = useNavigate()
-    const location = useLocation()
+    const [params] = useSearchParams()
     const [showModal, setShowModal] = useState(false)
+    const [busy, setBusy] = useState(false)
 
     const handleNext = () => {
         setShowModal(true)
@@ -22,7 +24,7 @@ function Stage11() {
 
             <BottomBar
                 current={11}
-                total={21}
+                total={11}
                 prevPath="/stage10"
                 nextPath="/stage12"
                 onNext={handleNext}
@@ -38,9 +40,23 @@ function Stage11() {
                         <button
                             type="button"
                             className="modal__btn"
-                            onClick={() => navigate({ pathname: '/stage12', search: location.search })}
+                            disabled={busy}
+                            onClick={async () => {
+                                const productId = params.get('id')
+                                setBusy(true)
+                                try {
+                                    if (productId) {
+                                        await productsApi.submitProductReview(productId)
+                                    }
+                                    navigate('/')
+                                } catch (error) {
+                                    window.alert(error.message || 'Не удалось отправить на проверку')
+                                } finally {
+                                    setBusy(false)
+                                }
+                            }}
                         >
-                            Понятно
+                            {busy ? 'Отправка...' : 'Понятно'}
                         </button>
                     </div>
                 </div>

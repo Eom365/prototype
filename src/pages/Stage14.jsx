@@ -10,7 +10,7 @@ function Stage14() {
     return (
         <>
             <div className="container">
-                <h1 className="title">Этап 14 — Фотографии продукта</h1>
+                <h1 className="title">Этап 3 — Фотографии продукта</h1>
                 <h2 className="subtitle">Добавьте фотографии продукта</h2>
                 <p className="section-description">
                     Загрузите изображения одного конкретного варианта изделия: общий вид, ракурсы,
@@ -32,7 +32,7 @@ function Stage14() {
                 <VariationPreview stage={14} />
 
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
-                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 13.</p>}
+                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 2.</p>}
                 {productId && variationId && (
                     <PhotoGallery
                         key={variationId}
@@ -43,7 +43,7 @@ function Stage14() {
                 )}
             </div>
 
-            <BottomBar current={14} total={21} prevPath="/stage13" nextPath="/stage15" />
+            <BottomBar current={3} total={10} prevPath="/stage13" nextPath="/stage15" />
         </>
     )
 }

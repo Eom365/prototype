@@ -79,6 +79,26 @@ public class ProductsController : ControllerBase
         return NoContent();
     }
 
+    [HttpPost("{id:guid}/review")]
+    public async Task<ActionResult<ProductDetailDto>> ReviewProduct(Guid id, ReviewDecisionDto dto)
+    {
+        var product = await _db.Products.FirstOrDefaultAsync(item => item.Id == id);
+        if (product == null)
+            return NotFound(new { message = "Карточка не найдена" });
+
+        var decision = (dto.Decision ?? "").Trim().ToLowerInvariant();
+        if (decision == "approve")
+            product.ReviewStatus = "approved";
+        else if (decision == "submit")
+            product.ReviewStatus = "pending";
+        else
+            return BadRequest(new { message = "Неизвестное решение" });
+
+        Touch(product, product.CurrentStage);
+        await _db.SaveChangesAsync();
+        return await Get(id);
+    }
+
     [HttpPost("{id:guid}/complete")]
     public async Task<ActionResult<ProductDetailDto>> Complete(Guid id)
     {
@@ -664,12 +684,39 @@ public class ProductsController : ControllerBase
     [HttpGet("/api/reviews")]
     public async Task<ActionResult<List<ReviewItemDto>>> PendingReviews()
     {
+        var items = new List<ReviewItemDto>();
+
+        var pendingProducts = await _db.Products.AsNoTracking()
+            .Where(item => item.ReviewStatus == "pending")
+            .OrderBy(item => item.UpdatedAt)
+            .ToListAsync();
+        var pendingProductIds = pendingProducts.Select(item => item.Id).ToList();
+        var baseShipmentPoints = pendingProductIds.Count == 0
+            ? new List<ShipmentPoint>()
+            : await _db.ShipmentPoints.AsNoTracking()
+                .Where(item => pendingProductIds.Contains(item.ProductId) && item.VariationId == null && item.Active)
+                .ToListAsync();
+        foreach (var product in pendingProducts)
+        {
+            var point = baseShipmentPoints.FirstOrDefault(item => item.ProductId == product.Id);
+            items.Add(new ReviewItemDto
+            {
+                ProductId = product.Id,
+                VariationId = null,
+                Title = Title(product),
+                Price = product.Price,
+                Currency = product.Currency,
+                Address = point?.AddressLine,
+                Chips = new List<string>()
+            });
+        }
+
         var variations = await _db.ProductVariations.AsNoTracking()
             .Where(item => item.ReviewStatus == "pending")
             .OrderBy(item => item.CreatedAt)
             .ToListAsync();
         if (variations.Count == 0)
-            return new List<ReviewItemDto>();
+            return items;
 
         var productIds = variations.Select(item => item.ProductId).Distinct().ToList();
         var variationIds = variations.Select(item => item.Id).ToList();
@@ -684,7 +731,7 @@ public class ProductsController : ControllerBase
             .Where(item => productIds.Contains(item.ProductId))
             .ToListAsync();
 
-        return variations.Select(variation =>
+        items.AddRange(variations.Select(variation =>
         {
             var product = products.FirstOrDefault(item => item.Id == variation.ProductId);
             var codes = axes.Where(item => item.ProductId == variation.ProductId).Select(item => item.Code).ToHashSet();
@@ -706,7 +753,8 @@ public class ProductsController : ControllerBase
                 Address = point?.AddressLine,
                 Chips = chips
             };
-        }).ToList();
+        }));
+        return items;
     }
 
     [HttpPost("{id:guid}/variations/{variationId:guid}/review")]
@@ -1042,6 +1090,7 @@ public class ProductsController : ControllerBase
     {
         Id = product.Id,
         Status = product.Status,
+        ReviewStatus = string.IsNullOrWhiteSpace(product.ReviewStatus) ? "filling" : product.ReviewStatus,
         CurrentStage = product.CurrentStage,
         Title = Title(product),
         KindName = product.ProductKind?.Name,

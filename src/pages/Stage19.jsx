@@ -39,7 +39,7 @@ function Stage19() {
   const save = () => {
     if (!productId)
       throw new Error("Сначала создайте карточку на главной странице");
-    if (!variationId) throw new Error("Сначала создайте вариант на этапе 13");
+    if (!variationId) throw new Error("Сначала создайте вариант на этапе 2");
     if (!loaded) throw new Error("Карточка ещё загружается, подождите секунду");
     return productsApi.savePrice(productId, {
       variationId,
@@ -72,7 +72,7 @@ function Stage19() {
     <>
       <div className="container stage19-page">
         <h1 className="title">
-          Этап 19. Добавьте стоимость товара и систему лояльности
+          Этап 8 — Добавьте стоимость товара и систему лояльности
         </h1>
         <VariationPreview stage={19} />
         {!productId && (
@@ -81,7 +81,7 @@ function Stage19() {
           </p>
         )}
         {productId && !variationId && (
-          <p className="form-error">Сначала создайте вариант на этапе 13.</p>
+          <p className="form-error">Сначала создайте вариант на этапе 2.</p>
         )}
         {error && <p className="form-error">{error}</p>}
 
@@ -197,8 +197,8 @@ function Stage19() {
       </div>
 
       <BottomBar
-        current={19}
-        total={21}
+        current={8}
+        total={10}
         prevPath="/stage18"
         nextPath="/stage20"
         onSave={save}

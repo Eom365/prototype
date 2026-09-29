@@ -17,6 +17,11 @@ public static class SchemaPatch
         AddColumn(connection, "Products", "Currency", "TEXT NULL");
         AddColumn(connection, "Products", "Price", "TEXT NULL");
         AddColumn(connection, "Products", "WantsVariants", "INTEGER NOT NULL DEFAULT 0");
+        AddColumn(connection, "Products", "ReviewStatus", "TEXT NOT NULL DEFAULT 'filling'");
+        Execute(connection, """
+            UPDATE Products SET ReviewStatus = 'approved'
+            WHERE Status = 'ready' AND (ReviewStatus IS NULL OR ReviewStatus = '' OR ReviewStatus = 'filling');
+            """);
         AddColumn(connection, "Products", "PackMaterial", "TEXT NULL");
         AddColumn(connection, "Products", "PackMaterialCustom", "TEXT NULL");
 

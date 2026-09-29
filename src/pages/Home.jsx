@@ -79,38 +79,57 @@ function Home() {
 
             <div className="card-list">
                 {visible.length === 0 && <p>Карточек пока нет</p>}
-                {visible.map((item) => (
-                    <article className="product-card" key={item.id}>
-                        <div className="product-card__main">
-                            <h2>{item.title}</h2>
-                            <p>{item.kindName || 'Вид не выбран'}</p>
-                            <p>{item.categoryPath || 'Категория не указана'}</p>
-                            <p>
-                                {item.article ? `Артикул: ${item.article}` : 'Артикул не заполнен'}
-                                {item.model ? ` · Модель: ${item.model}` : ''}
-                            </p>
-                            <p>
-                                {[item.authorLastName, item.authorFirstName, item.authorMiddleName].filter(Boolean).join(' ') || 'ФИО не заполнено'}
-                            </p>
-                            <p className="product-card__meta">
-                                {item.status === 'ready' ? 'Готово' : 'Черновик'}
-                                {' · '}
-                                {new Date(item.updatedAt).toLocaleString('ru-RU')}
-                            </p>
-                        </div>
-                        <div className="product-card__actions">
-                            <button
-                                className="bottom-bar__btn"
-                                onClick={() => navigate(`/stage13?id=${item.id}`)}
-                            >
-                                Редактировать
-                            </button>
-                            <button className="bottom-bar__btn" onClick={() => handleDelete(item.id)}>
-                                Удалить
-                            </button>
-                        </div>
-                    </article>
-                ))}
+                {visible.map((item) => {
+                    const reviewApproved = item.reviewStatus === 'approved'
+                    return (
+                        <article
+                            className={`product-card${reviewApproved ? ' product-card--review-approved' : ''}`}
+                            key={item.id}
+                        >
+                            {reviewApproved && (
+                                <span className="product-card__approved" title="Проверка пройдена">✓</span>
+                            )}
+                            <div className="product-card__main">
+                                <h2>{item.title}</h2>
+                                <p>{item.kindName || 'Вид не выбран'}</p>
+                                <p>{item.categoryPath || 'Категория не указана'}</p>
+                                <p>
+                                    {item.article ? `Артикул: ${item.article}` : 'Артикул не заполнен'}
+                                    {item.model ? ` · Модель: ${item.model}` : ''}
+                                </p>
+                                <p>
+                                    {[item.authorLastName, item.authorFirstName, item.authorMiddleName].filter(Boolean).join(' ') || 'ФИО не заполнено'}
+                                </p>
+                                <p className="product-card__meta">
+                                    {item.status === 'ready' ? 'Готово' : 'Черновик'}
+                                    {' · '}
+                                    {new Date(item.updatedAt).toLocaleString('ru-RU')}
+                                </p>
+                            </div>
+                            <div className="product-card__actions">
+                                <button
+                                    className="bottom-bar__btn"
+                                    onClick={() => navigate(`/stage13?id=${item.id}`)}
+                                >
+                                    Редактировать
+                                </button>
+                                {reviewApproved && (
+                                    <button
+                                        type="button"
+                                        className="home__variant-btn bottom-bar__btn"
+                                        onClick={() => navigate(`/stage12?id=${item.id}`)}
+                                    >
+                                        <span className="home__variant-btn-icon" aria-hidden>+</span>
+                                        <span>Добавить вариант параметра продукта</span>
+                                    </button>
+                                )}
+                                <button className="bottom-bar__btn" onClick={() => handleDelete(item.id)}>
+                                    Удалить
+                                </button>
+                            </div>
+                        </article>
+                    )
+                })}
             </div>
         </div>
     )

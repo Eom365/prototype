@@ -61,7 +61,7 @@ public class ReviewDecisionDto
 public class ReviewItemDto
 {
     public Guid ProductId { get; set; }
-    public Guid VariationId { get; set; }
+    public Guid? VariationId { get; set; }
     public string Title { get; set; } = "";
     public string? Price { get; set; }
     public string? Currency { get; set; }
@@ -163,6 +163,7 @@ public class ProductListItemDto
 {
     public Guid Id { get; set; }
     public string Status { get; set; } = "draft";
+    public string ReviewStatus { get; set; } = "filling";
     public int CurrentStage { get; set; }
     public string Title { get; set; } = "";
     public string? KindName { get; set; }

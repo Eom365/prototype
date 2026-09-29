@@ -166,7 +166,7 @@ function Stage8() {
 
             <BottomBar
                 current={8}
-                total={21}
+                total={11}
                 prevPath="/stage7"
                 nextPath="/stage9"
                 onSave={save}

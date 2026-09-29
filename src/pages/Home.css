@@ -75,10 +75,48 @@
 }
 
 .product-card {
+    position: relative;
     border: 1px solid #ddd;
     border-radius: 12px;
     padding: 16px;
     background: #fff;
+}
+
+.product-card__approved {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1;
+    color: #2ecc71;
+    pointer-events: none;
+}
+
+.product-card--review-approved .product-card__main {
+    padding-left: 36px;
+}
+
+.home__variant-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.home__variant-btn-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid #5b2c0f;
+    background: #fff;
+    color: #5b2c0f;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .product-card__main h2 {
