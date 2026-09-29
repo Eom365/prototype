@@ -134,13 +134,12 @@
     line-height: 1.4;
 }
 
-/* ===== Таблица ===== */
 .variants-table {
     border: 1.5px solid #333;
     border-radius: 10px;
     padding: 12px 16px;
     background: #fff;
-    margin-bottom: 20px;
+
 }
 
 .variant-row {
@@ -259,6 +258,7 @@
 
 .action-primary {
     padding: 12px 18px;
+    margin-block-end: 20px;
     font-size: 14px;
     font-weight: 600;
     font-family: inherit;
@@ -268,9 +268,9 @@
     border-radius: 8px;
     cursor: pointer;
     display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    gap: 18px;
     transition: background 0.2s;
+    text-align: left;
 }
 
 .action-primary:hover {

@@ -611,16 +611,23 @@ function Stage13() {
                 )}
 
                 {error && <p className="form-error">{error}</p>}
-
+                <button
+                    type="button"
+                    className="action-primary"
+                    onClick={handleCreateVariant}
+                >
+                    Создать вариант параметра продукта
+                    <span className="info-icon info-icon--white" title="Подсказка">?</span>
+                </button>
                 <div className="variants-actions">
-                    <button
+                    {/* <button
                         type="button"
                         className="action-primary"
                         onClick={handleCreateVariant}
                     >
                         Создать вариант параметра продукта
                         <span className="info-icon info-icon--white" title="Подсказка">?</span>
-                    </button>
+                    </button> */}
                     <button type="button" className="action-secondary">
                         Скачать шаблон Excel
                         <span className="info-icon" title="Подсказка">?</span>
