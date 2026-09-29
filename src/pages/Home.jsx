@@ -114,14 +114,19 @@ function Home() {
                                     Редактировать
                                 </button>
                                 {reviewApproved && (
-                                    <button
-                                        type="button"
-                                        className="home__variant-btn bottom-bar__btn"
-                                        onClick={() => navigate(`/stage12?id=${item.id}`)}
-                                    >
-                                        <span className="home__variant-btn-icon" aria-hidden>+</span>
-                                        <span>Добавить вариант параметра продукта</span>
-                                    </button>
+                                    <div className="tooltip-wrapper">
+                                        <button
+                                            type="button"
+                                            className="home__variant-btn bottom-bar__btn"
+                                            onClick={() => navigate(`/stage12?id=${item.id}`)}
+                                        >
+                                            <span className="home__variant-btn-icon" aria-hidden>+</span>
+                                            <span>Добавить вариант параметра продукта</span>
+                                        </button>
+                                        <span className="tooltip-text">
+                                            Вариант параметра продукта — это характеристики, по которым покупатель может выбрать один из нескольких вариантов внутри одной карточки продукта.
+                                        </span>
+                                    </div>
                                 )}
                                 <button className="bottom-bar__btn" onClick={() => handleDelete(item.id)}>
                                     Удалить

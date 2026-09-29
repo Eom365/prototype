@@ -221,9 +221,25 @@ function Stage5() {
                                 .filter((field) => group.name !== 'Габариты' || !DIMENSION_CODES.includes(field.code))
                                 .map((field) => (
                                     <div key={field.code}>
+                                       
+
                                         {group.name === 'Основные' && field.code === 'model' && (
                                             <>
                                                 <img alt="Линейка и бренд" class="oneimg" src="/images/one.png"></img>
+                                                {group.name === 'Основные' && field.code === 'model' && (() => {
+                                                    const brandField = kind?.characteristics?.find((f) => f.code === 'brand');
+                                                    if (!brandField) return null;
+                                                    return (
+                                                        <>
+                                                            <CharacteristicRow
+                                                                field={brandField}
+                                                                value={specs['brand']}
+                                                                unitGroups={catalog?.unitGroups}
+                                                                onChange={(patch) => updateSpec('brand', patch)}
+                                                            />
+                                                        </>
+                                                    );
+                                                })()}
 
                                                 <div className="field-row product-line-row">
                                                     <span className="info-icon" title="Подсказка">ⓘ</span>
