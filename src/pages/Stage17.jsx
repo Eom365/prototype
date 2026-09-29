@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import BottomBar from '../components/BottomBar'
+import { VARIANT_FILL_STAGE_COUNT, variantFillStageHeading, variantFillStep } from '../stageProgress'
 import VariationPreview from '../components/VariationPreview'
 import { productsApi } from '../api'
 import { useCardIds } from '../cardScope'
@@ -100,10 +101,10 @@ function Stage17() {
     return (
         <>
             <div className="container stage17-page">
-                <h2 className="subtitle">Этап 6 — Добавьте документы</h2>
+                <h2 className="subtitle">{variantFillStageHeading(17, 'Добавьте документы')}</h2>
                 <VariationPreview stage={17} />
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
-                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 2.</p>}
+                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 13.</p>}
                 {error && <p className="form-error">{error}</p>}
 
                 <div className="form">
@@ -183,7 +184,7 @@ function Stage17() {
                 )}
             </div>
 
-            <BottomBar current={6} total={10} prevPath="/stage16" nextPath="/stage18" />
+            <BottomBar current={variantFillStep(17)} total={VARIANT_FILL_STAGE_COUNT} prevPath="/stage16" nextPath="/stage18" />
         </>
     )
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import BottomBar from '../components/BottomBar'
+import { VARIANT_FILL_STAGE_COUNT, variantFillStageHeading, variantFillStep } from '../stageProgress'
 import PackTypeHint from '../components/PackTypeHint'
 import PhotoGallery from '../components/PhotoGallery'
 import VariationPreview from '../components/VariationPreview'
@@ -45,7 +46,7 @@ function Stage18() {
 
     const save = () => {
         if (!productId) throw new Error('Сначала создайте карточку на главной странице')
-        if (!variationId) throw new Error('Сначала создайте вариант на этапе 2')
+        if (!variationId) throw new Error('Сначала создайте вариант на этапе 13')
         if (!loaded) throw new Error('Карточка ещё загружается, подождите секунду')
         return productsApi.saveVariationPackaging(productId, variationId, {
             packType,
@@ -66,10 +67,10 @@ function Stage18() {
     return (
         <>
             <div className="container">
-                <h1 className="title">Этап 7 — Добавьте упаковку</h1>
+                <h1 className="title">{variantFillStageHeading(18, 'Добавьте упаковку')}</h1>
                 <VariationPreview stage={18} />
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
-                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 2.</p>}
+                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 13.</p>}
                 {error && <p className="form-error">{error}</p>}
 
                 {/* Вид упаковки */}
@@ -340,7 +341,7 @@ function Stage18() {
                 </div>
             </div>
 
-            <BottomBar current={7} total={10} prevPath="/stage17" nextPath="/stage19" onSave={save} />
+            <BottomBar current={variantFillStep(18)} total={VARIANT_FILL_STAGE_COUNT} prevPath="/stage17" nextPath="/stage19" onSave={save} />
         </>
     )
 }

@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { notifyProductUpdated } from '../api'
 import './BottomBar.css'
 
-function BottomBar({ current, total = 11, nextPath, prevPath, onSave, onFinish, onNext }) {
+function BottomBar({ current, total = 11, nextPath, prevPath, onSave, onFinish, onNext, showStep = true }) {
     const navigate = useNavigate()
     const location = useLocation()
     const [params] = useSearchParams()
@@ -13,8 +13,8 @@ function BottomBar({ current, total = 11, nextPath, prevPath, onSave, onFinish, 
         if (busy) return
         setBusy(true)
         try {
-            if (onSave) await onSave()
-            notifyProductUpdated(params.get('id'))
+            if (onSave && finish) await onSave()
+            if (finish) notifyProductUpdated(params.get('id'))
             if (finish && onFinish) await onFinish()
             if (finish && onNext) {
                 onNext()
@@ -36,9 +36,11 @@ function BottomBar({ current, total = 11, nextPath, prevPath, onSave, onFinish, 
     return (
         <div className="bottom-bar">
             <div className="bottom-bar__col">
-                <span className="bottom-bar__stage">
-                    {current} из {total}
-                </span>
+                {showStep && (
+                    <span className="bottom-bar__stage">
+                        {current} из {total}
+                    </span>
+                )}
             </div>
 
             <div className="bottom-bar__col">

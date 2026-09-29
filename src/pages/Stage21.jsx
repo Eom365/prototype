@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { productsApi } from '../api'
 import BottomBar from '../components/BottomBar'
+import { VARIANT_FILL_STAGE_COUNT, variantFillStageHeading, variantFillStep } from '../stageProgress'
 import './Stage21.css'
 
 function Stage21() {
@@ -16,13 +17,13 @@ function Stage21() {
     return (
         <>
             <div className="container">
-                <h1 className="title">Этап 10 — Предварительный просмотр</h1>
+                <h1 className="title">{variantFillStageHeading(21, 'Предварительный просмотр')}</h1>
                 <h2 className="subtitle">*Открывается заполненная карточка товара для просмотра*</h2>
             </div>
 
             <BottomBar
-                current={10}
-                total={10}
+                current={variantFillStep(21)}
+                total={VARIANT_FILL_STAGE_COUNT}
                 prevPath="/stage20"
                 onNext={handleNext}
             />

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import BottomBar from '../components/BottomBar'
+import { VARIANT_FILL_STAGE_COUNT, variantFillStageHeading, variantFillStep } from '../stageProgress'
 import VariationPreview from '../components/VariationPreview'
 import { productsApi } from '../api'
 import { sameId, useCardIds } from '../cardScope'
@@ -89,7 +90,7 @@ function Stage16() {
 
     const save = () => {
         if (!productId) throw new Error('Сначала создайте карточку на главной странице')
-        if (!variationId) throw new Error('Сначала создайте вариант на этапе 2')
+        if (!variationId) throw new Error('Сначала создайте вариант на этапе 13')
         if (!loaded) throw new Error('Карточка ещё загружается, подождите секунду')
         const savedFeatures = normalizeNameFeatures(features, parts)
         return productsApi.saveVariationName(productId, variationId, {
@@ -108,10 +109,10 @@ function Stage16() {
     return (
         <>
             <div className="container">
-                <h1 className="title">Этап 5 — Полное наименование продукта</h1>
+                <h1 className="title">{variantFillStageHeading(16, 'Полное наименование продукта')}</h1>
                 <VariationPreview stage={16} />
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
-                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 2.</p>}
+                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 13.</p>}
                 {error && <p className="form-error">{error}</p>}
 
                 <div className="field">
@@ -194,7 +195,7 @@ function Stage16() {
                 </div>
             </div>
 
-            <BottomBar current={5} total={10} prevPath="/stage15" nextPath="/stage17" onSave={save} />
+            <BottomBar current={variantFillStep(16)} total={VARIANT_FILL_STAGE_COUNT} prevPath="/stage15" nextPath="/stage17" onSave={save} />
         </>
     )
 }

@@ -469,7 +469,7 @@ function Stage13() {
         <>
             <div className="container">
                 <h1 className="title">
-                    Этап 2 — Создание варианта параметра продукта
+                    Создание варианта параметра продукта
                     <span className="info-icon" title="Подсказка">?</span>
                 </h1>
                 {/* <h2 className="subtitle">
@@ -611,31 +611,25 @@ function Stage13() {
                 )}
 
                 {error && <p className="form-error">{error}</p>}
-                <button
-                    type="button"
-                    className="action-primary"
-                    onClick={handleCreateVariant}
-                >
-                    Создать вариант параметра продукта
-                    <span className="info-icon info-icon--white" title="Подсказка">?</span>
-                </button>
                 <div className="variants-actions">
-                    {/* <button
+                    <button
                         type="button"
                         className="action-primary"
                         onClick={handleCreateVariant}
                     >
                         Создать вариант параметра продукта
                         <span className="info-icon info-icon--white" title="Подсказка">?</span>
-                    </button> */}
-                    <button type="button" className="action-secondary">
-                        Скачать шаблон Excel
-                        <span className="info-icon" title="Подсказка">?</span>
                     </button>
-                    <button type="button" className="action-secondary">
-                        Загрузить шаблон Excel
-                        <span className="info-icon" title="Подсказка">?</span>
-                    </button>
+                    <div className="variants-actions__row">
+                        <button type="button" className="action-secondary">
+                            Скачать шаблон Excel
+                            <span className="info-icon" title="Подсказка">?</span>
+                        </button>
+                        <button type="button" className="action-secondary">
+                            Загрузить шаблон Excel
+                            <span className="info-icon" title="Подсказка">?</span>
+                        </button>
+                    </div>
                 </div>
 
                 {/* ===== ОДНА готовая карточка ===== */}
@@ -959,7 +953,7 @@ function Stage13() {
                 )}
             </div>
 
-            <BottomBar current={2} total={10} prevPath="/stage12" nextPath="/stage14" onSave={saveAxes} />
+            <BottomBar showStep={false} prevPath="/stage12" nextPath="/stage14" onSave={saveAxes} />
         </>
     )
 }

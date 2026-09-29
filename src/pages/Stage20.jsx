@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import BottomBar from '../components/BottomBar'
+import { VARIANT_FILL_STAGE_COUNT, variantFillStageHeading, variantFillStep } from '../stageProgress'
 import VariationPreview from '../components/VariationPreview'
 import { productsApi } from '../api'
 import { blankWarehouse, composeAddress, pointsFrom, pointsPayload, useCardIds, warehouseFormFrom } from '../cardScope'
@@ -31,7 +32,7 @@ function Stage20() {
 
     const save = () => {
         if (!productId) throw new Error('Сначала создайте карточку на главной страницы')
-        if (!variationId) throw new Error('Сначала создайте вариант на этапе 2')
+        if (!variationId) throw new Error('Сначала создайте вариант на этапе 13')
         if (!loaded) throw new Error('Карточка ещё загружается, подождите секунду')
         return productsApi.saveShipments(productId, {
             variationId,
@@ -112,10 +113,10 @@ function Stage20() {
     return (
         <>
             <div className="container stage20-page">
-                <h1 className="title">Этап 9 — Доставка</h1>
+                <h1 className="title">{variantFillStageHeading(20, 'Доставка')}</h1>
                 <VariationPreview stage={20} />
                 {!productId && <p className="form-error">Откройте создание карточки с главной страницы.</p>}
-                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 2.</p>}
+                {productId && !variationId && <p className="form-error">Сначала создайте вариант на этапе 13.</p>}
                 {error && <p className="form-error">{error}</p>}
 
                 <h2 className="subtitle">Количество товара на складе</h2>
@@ -250,7 +251,7 @@ function Stage20() {
                 </div>
             </div>
 
-            <BottomBar current={9} total={10} prevPath="/stage19" nextPath="/stage21" onSave={save} />
+            <BottomBar current={variantFillStep(20)} total={VARIANT_FILL_STAGE_COUNT} prevPath="/stage19" nextPath="/stage21" onSave={save} />
         </>
     )
 }
