@@ -215,7 +215,7 @@ function Stage5() {
                                     onChange={updateSpec}
                                 />
                             )}
-
+                            
                             {group.fields
                                 .filter((field) => !(field.code === 'lightSource' && specs.light?.value === 'no'))
                                 .filter((field) => group.name !== 'Габариты' || !DIMENSION_CODES.includes(field.code))
