@@ -238,12 +238,12 @@ function Stage5() {
                                                         />
                                                     </div>
                                                 </div>
-                                                <p className="field-description">
+                                                {/* <p className="field-description">
                                                     <b>Линейка продукции</b> — это группа моделей товаров одного бренда, объединённых общим названием.
                                                     <br />Пример 1: Смартфон iPhone 15.<br />Смартфон iPhone 15 Pro.<br />Смартфон iPhone 15 Pro Max.<br /> Линейка — <b>iPhone</b>, модели внутри — 15, 15 Pro, 15 Pro Max.
                                                     <br />Пример 2: Ноутбук MateBook D.<br />Ноутбук MateBook X.<br />Ноутбук MateBook X Pro.<br /> Линейка — <b>MateBook</b>, модели внутри — D, X, X Pro.
                                                     <br />Если товар единственный и линейки нет — поле можно не заполнять.
-                                                </p>
+                                                </p> */}
                                             </>
                                         )}
 
