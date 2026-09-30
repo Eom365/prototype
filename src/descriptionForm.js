@@ -14,8 +14,7 @@ export const emptyDescriptionForm = () => ({
         principle: '',
     },
     complectation: {
-        name: '',
-        quantity: '',
+        items: [{ name: '', quantity: '' }],
     },
     applicationArea: {
         sphere: '',
@@ -114,23 +113,40 @@ function parseStorageConditions(raw) {
     }
 }
 
+function normalizeComplectationItems(items) {
+    const list = (items.length ? items : [{ name: '', quantity: '' }]).map((item) => ({
+        name: item.name || '',
+        quantity: item.quantity || '',
+    }))
+    const last = list[list.length - 1]
+    if (last.name.trim() || last.quantity.trim()) {
+        list.push({ name: '', quantity: '' })
+    }
+    return list
+}
+
 function parseComplectation(raw) {
     const defaults = emptyDescriptionForm().complectation
     if (!raw) return { ...defaults }
     try {
         const parsed = JSON.parse(raw)
         if (typeof parsed !== 'object' || parsed === null) return { ...defaults }
+        if (Array.isArray(parsed.items)) {
+            return { items: normalizeComplectationItems(parsed.items) }
+        }
         if (parsed.name !== undefined || parsed.quantity !== undefined) {
             return {
-                name: parsed.name || '',
-                quantity: parsed.quantity || '',
+                items: normalizeComplectationItems([{
+                    name: parsed.name || '',
+                    quantity: parsed.quantity || '',
+                }]),
             }
         }
         if (parsed.contents) {
-            return { name: parsed.contents, quantity: '' }
+            return { items: normalizeComplectationItems([{ name: parsed.contents, quantity: '' }]) }
         }
     } catch {
-        return { name: raw, quantity: '' }
+        return { items: normalizeComplectationItems([{ name: raw, quantity: '' }]) }
     }
     return { ...defaults }
 }

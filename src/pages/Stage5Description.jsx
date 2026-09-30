@@ -92,6 +92,16 @@ function ConditionGroup({ title, values, onChange }) {
   );
 }
 
+function patchComplectationItem(form, onChange, index, patch) {
+  const items = [...(form.complectation.items || [{ name: "", quantity: "" }])];
+  items[index] = { ...items[index], ...patch };
+  const last = items[items.length - 1];
+  if (last.name.trim() || last.quantity.trim()) {
+    items.push({ name: "", quantity: "" });
+  }
+  onChange("complectation", { items });
+}
+
 export default function Stage5Description({ form, onChange }) {
   return (
     <div className="desc-blocks">
@@ -120,28 +130,31 @@ export default function Stage5Description({ form, onChange }) {
       </DescriptionBlock>
 
       <DescriptionBlock title="Комплектация">
-        <div className="desc-complectation-row">
-          <DescriptionInput
-            value={form.complectation.name}
-            onChange={(value) =>
-              onChange("complectation", { ...form.complectation, name: value })
-            }
-            placeholder="Что находится в упаковке (укажите наименование)"
-          />
-          <span className="desc-complectation-row__dash">—</span>
-          <div className="desc-complectation-quantity">
-            <DescriptionInput
-              value={form.complectation.quantity}
-              onChange={(value) =>
-                onChange("complectation", {
-                  ...form.complectation,
-                  quantity: value,
-                })
-              }
-              placeholder="количество"
-            />
-            <span className="desc-complectation-quantity__unit">штук</span>
-          </div>
+        <div className="desc-complectation-list">
+          {(form.complectation.items || [{ name: "", quantity: "" }]).map(
+            (item, index) => (
+              <div className="desc-complectation-row" key={index}>
+                <DescriptionInput
+                  value={item.name}
+                  onChange={(value) =>
+                    patchComplectationItem(form, onChange, index, { name: value })
+                  }
+                  placeholder="Что находится в упаковке (укажите наименование)"
+                />
+                <span className="desc-complectation-row__dash">—</span>
+                <div className="desc-complectation-quantity">
+                  <DescriptionInput
+                    value={item.quantity}
+                    onChange={(value) =>
+                      patchComplectationItem(form, onChange, index, { quantity: value })
+                    }
+                    placeholder="количество"
+                  />
+                  <span className="desc-complectation-quantity__unit">штук</span>
+                </div>
+              </div>
+            ),
+          )}
         </div>
       </DescriptionBlock>
 

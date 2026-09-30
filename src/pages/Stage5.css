@@ -141,6 +141,12 @@
     width: 100%;
 }
 
+.desc-complectation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .desc-complectation-row {
     display: flex;
     align-items: center;
@@ -195,7 +201,7 @@
 }
 
 .product-line-row {
-    grid-template-columns: 24px minmax(180px, 240px) minmax(180px, 1fr);
+    grid-template-columns: 24px 30px minmax(180px, 240px) minmax(180px, 1fr);
 }
 
 .product-line-control {
@@ -346,11 +352,18 @@
 
 .field-row {
     display: grid;
-    grid-template-columns: 24px minmax(180px, 240px) minmax(180px, 1fr) 160px 30px;
+    grid-template-columns: 24px 30px minmax(180px, 240px) minmax(180px, 1fr) 160px;
     align-items: center;
     gap: 12px;
     border-bottom: 1px solid #ddd;
     padding-bottom: 12px;
+}
+
+.required-mark-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
 }
 
 .info-icon {
@@ -412,7 +425,7 @@
 }
 
 .field-row--options {
-    grid-template-columns: 24px 1fr auto 30px;
+    grid-template-columns: 24px 30px minmax(180px, 240px) minmax(180px, 1fr);
     align-items: start;
 }
 

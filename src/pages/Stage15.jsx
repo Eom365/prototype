@@ -182,6 +182,7 @@ function Stage15() {
                             {group.name === 'Производитель' && (
                                 <div className="field-row">
                                     <span className="info-icon" title="Подсказка">ⓘ</span>
+                                    <span className="required-mark-slot" aria-hidden="true" />
                                     <span className="field-name">Логотип</span>
                                     {logo ? (
                                         <div className="field-input field-input--file field-input--has-file">
@@ -236,6 +237,11 @@ function CharacteristicRow({ field, value, unitGroups, onChange }) {
     return (
         <div className={`field-row ${field.inputType === 'choice' ? 'field-row--options' : ''}`}>
             <span className="info-icon" title="Подсказка">ⓘ</span>
+            <span className="required-mark-slot">
+                {field.required && field.code !== 'brand' && (
+                    <span className="required-mark">✱</span>
+                )}
+            </span>
             <span className="field-name">{field.name}</span>
 
             {field.inputType === 'choice' ? (
@@ -290,8 +296,6 @@ function CharacteristicRow({ field, value, unitGroups, onChange }) {
                     ))}
                 </select>
             )}
-
-            {field.required && <span className="required-mark">✱</span>}
         </div>
     )
 }

@@ -277,6 +277,7 @@ function Stage5() {
 
                                                     <div className="field-row product-line-row">
                                                         <span className="info-icon" title="Подсказка">ⓘ</span>
+                                                        <span className="required-mark-slot" aria-hidden="true" />
                                                         <span className="field-name">Линейка продукции</span>
                                                         <div className="product-line-control">
                                                             <input
@@ -332,6 +333,7 @@ function Stage5() {
 
                                                     <div className="field-row">
                                                         <span className="info-icon" title="Подсказка">ⓘ</span>
+                                                        <span className="required-mark-slot" aria-hidden="true" />
                                                         <span className="field-name">Логотип</span>
 
                                                         {logo ? (
@@ -389,6 +391,11 @@ function CharacteristicRow({ field, value, unitGroups, onChange }) {
     return (
         <div className={`field-row ${field.inputType === 'choice' ? 'field-row--options' : ''}`}>
             <span className="info-icon" title="Подсказка">ⓘ</span>
+            <span className="required-mark-slot">
+                {field.required && field.code !== 'brand' && (
+                    <span className="required-mark">✱</span>
+                )}
+            </span>
             <span className="field-name">{FIELD_LABELS[field.code] || field.name}</span>
 
             {field.inputType === 'choice' ? (
@@ -442,10 +449,6 @@ function CharacteristicRow({ field, value, unitGroups, onChange }) {
                         <option key={unit.value} value={unit.value}>{unit.label}</option>
                     ))}
                 </select>
-            )}
-
-            {field.required && field.code !== 'brand' && (
-                <span className="required-mark">✱</span>
             )}
         </div>
     )
