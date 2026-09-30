@@ -87,7 +87,7 @@ function Stage1() {
     <>
       <div className="container stage1-page">
         <h1 className="title">Этап 1 - Проверка идентичности товара</h1>
-        <h2 className="subtitle">
+        <h2 className="subtitle standart">
           Введите информацию о товаре для поиска совпадений среди существующих
           карточек товаров
         </h2>
@@ -142,7 +142,7 @@ function Stage1() {
         <div className="form">
           <div className="field">
             <label className="label">Наименование продукта</label>
-            <p>
+            <p className="standart">
               Укажите полное наименование продукта в соответствии с
               сопроводительными документами или маркировкой производителя.
             </p>
@@ -166,7 +166,7 @@ function Stage1() {
 
           <div className="field">
             <label className="label">Наименование бренда</label>
-            <p className="field-description">{BRAND_DESCRIPTION}</p>
+            <p className="field-description standart" >{BRAND_DESCRIPTION}</p>
             <p className="pBold">Пример правильного заполнения: "ОМ 365"</p>
             <input
               type="text"
@@ -211,7 +211,7 @@ function Stage1() {
             </div>
           </div>
 
-          <div className="field">
+          {/* <div className="field">
             <label className="label">Идентификатор товара</label>
             <input
               type="text"
@@ -234,7 +234,7 @@ function Stage1() {
               className="input"
               placeholder="Введите значение..."
             />
-          </div>
+          </div> */}
         </div>
 
         {matches.length > 0 && (

@@ -14,7 +14,7 @@ function Stage3() {
       <div className="container">
         <h1 className="title">Этап 3 - Презентация продукции</h1>
         <h2 className="subtitle">Презентационные фотографии продукта</h2>
-        <p className="section-description">
+        <p className="section-description standart">
           {" "}
           Загрузите изображения, которые показывают ассортимент продукции: общий
           вид линейки, новинки продукции. Эти изображения не привязаны к

@@ -12,12 +12,13 @@ function Stage4() {
             <div className="container">
                 <h1 className="title">Этап 4 — Фотографии продукта</h1>
                 <h2 className="subtitle">Добавьте фотографии продукта</h2>
-                <p className="section-description">
+                <p className="section-description standart">
                     Загрузите изображения одного конкретного продукта: общий вид, ракурсы, детали,
                     комплектация. На каждом фото должен быть показан один товар, а не линейка
                     или ассортимент продукции.
                 </p>
-                <p className="pBold two">Продукт на фотографии должен быть на белом фоне.</p>
+                <p>Требования к фотографиям продукта: </p>
+                <p className="pBold standartOne">Фон: продукт на фотографии должен быть на белом фоне.<br /> Ракурс: продукт должен занимать 2/3 изображения.</p>
                 <p className="pBold">Пример правильного заполнения:</p>
 
                 <div className="presentation-images">
