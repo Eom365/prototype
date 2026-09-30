@@ -390,10 +390,10 @@ function CharacteristicRow({ field, value, unitGroups, onChange }) {
 
     return (
         <div className={`field-row ${field.inputType === 'choice' ? 'field-row--options' : ''}`}>
-            <span className="info-icon" title="Подсказка">ⓘ</span>
+            <span className="required-mark">✱</span>
             <span className="required-mark-slot">
                 {field.required && field.code !== 'brand' && (
-                    <span className="required-mark">✱</span>
+                    <span className="info-icon" title="Подсказка">ⓘ</span>
                 )}
             </span>
             <span className="field-name">{FIELD_LABELS[field.code] || field.name}</span>
